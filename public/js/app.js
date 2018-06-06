@@ -54176,7 +54176,7 @@ var render = function() {
             "div",
             {
               staticClass: "circle-progress active",
-              staticStyle: { visibility: "visible" }
+              staticStyle: { visibility: "visible", padding: "10px" }
             },
             [_c("div", { staticClass: "spinner" })]
           )
@@ -54351,7 +54351,7 @@ var render = function() {
             "div",
             {
               staticClass: "circle-progress active",
-              staticStyle: { visibility: "visible" }
+              staticStyle: { visibility: "visible", padding: "10px" }
             },
             [_c("div", { staticClass: "spinner" })]
           )
@@ -54441,7 +54441,7 @@ exports = module.exports = __webpack_require__(13)(false);
 
 
 // module
-exports.push([module.i, "\nh1[data-v-7cde4e08]{\n    text-align: center !important;\n    padding:5px;\n}\n", ""]);
+exports.push([module.i, "\nh1[data-v-7cde4e08] {\n    text-align: center !important;\n    padding: 5px;\n    padding-bottom: 10px;\n    border-bottom: 1px solid #dee2e6 !important;\n}\n", ""]);
 
 // exports
 
@@ -54743,6 +54743,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     name: 'task',
@@ -54825,21 +54846,21 @@ var render = function() {
               "div",
               {
                 staticClass: "circle-progress active",
-                staticStyle: { visibility: "visible" }
+                staticStyle: { visibility: "visible", padding: "10px" }
               },
               [_c("div", { staticClass: "spinner" })]
             )
           : _vm._e(),
         _vm._v(" "),
         !_vm.loading
-          ? _c("span", [
+          ? _c("div", [
               _c("h1", [_vm._v(_vm._s(_vm.task.task))]),
-              _vm._v(" "),
-              _c("hr"),
               _vm._v(" "),
               _vm._m(0),
               _vm._v(" "),
-              _vm._m(1)
+              _vm._m(1),
+              _vm._v(" "),
+              _vm._m(2)
             ])
           : _vm._e()
       ])
@@ -54847,6 +54868,65 @@ var render = function() {
   )
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticStyle: {
+          "border-bottom": "1px solid #dee2e6!important",
+          "padding-bottom": "10px",
+          "margin-bottom": "10px"
+        }
+      },
+      [
+        _c("div", { staticClass: "input-wrapper" }, [
+          _c("input", {
+            staticClass: "with-label",
+            attrs: { type: "email", id: "startTime" }
+          }),
+          _vm._v(" "),
+          _c(
+            "label",
+            { staticClass: "floating-label", attrs: { for: "startTime" } },
+            [_vm._v("Start Time")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-wrapper" }, [
+          _c("input", {
+            staticClass: "with-label",
+            attrs: { type: "email", id: "endTime" }
+          }),
+          _vm._v(" "),
+          _c(
+            "label",
+            { staticClass: "floating-label", attrs: { for: "endTime" } },
+            [_vm._v("End Time")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-wrapper" }, [
+          _c("textarea", {
+            staticClass: "with-label",
+            attrs: { type: "email", id: "remarks" }
+          }),
+          _vm._v(" "),
+          _c(
+            "label",
+            { staticClass: "floating-label", attrs: { for: "remarks" } },
+            [_vm._v("Remarks")]
+          )
+        ]),
+        _vm._v(" "),
+        _c("br"),
+        _vm._v(" "),
+        _c("br")
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -54866,7 +54946,10 @@ var staticRenderFns = [
         staticClass: "btn negative",
         staticStyle: { float: "right !important" }
       },
-      [_c("i", { staticClass: "icon icon-close" }), _vm._v(" Stop Activity")]
+      [
+        _c("i", { staticClass: "icon icon-close" }),
+        _vm._v(" Stop\n                Activity\n            ")
+      ]
     )
   }
 ]

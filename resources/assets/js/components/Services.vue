@@ -7,7 +7,7 @@
             </div>
         </header>
         <div class="content">
-            <div v-if="loading" class="circle-progress active" style="visibility: visible;">
+            <div v-if="loading" class="circle-progress active" style="visibility: visible; padding: 10px;">
                 <div class="spinner"></div>
             </div>
             <ul class="list" v-if="services.length > 0">

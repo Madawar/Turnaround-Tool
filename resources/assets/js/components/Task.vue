@@ -7,15 +7,34 @@
             </div>
         </header>
         <div class="content padded-full">
-            <div v-if="loading" class="circle-progress active" style="visibility: visible;">
+            <div v-if="loading" class="circle-progress active" style="visibility: visible; padding: 10px;">
                 <div class="spinner"></div>
             </div>
-            <span v-if="!loading">
-                  <h1>{{task.task}}</h1>
-            <hr/>
-            <button class="btn positive"><i class="icon icon-check"></i> Start Activity</button>
-            <button style="float: right !important;" class="btn negative"><i class="icon icon-close"></i> Stop Activity</button>
-            </span>
+            <div v-if="!loading">
+                <h1>{{task.task}}</h1>
+
+                <div style="border-bottom: 1px solid #dee2e6!important; padding-bottom: 10px; margin-bottom: 10px;">
+                    <div class="input-wrapper">
+                        <input class="with-label" type="email" id="startTime">
+                        <label class="floating-label" for="startTime">Start Time</label>
+                    </div>
+                    <div class="input-wrapper">
+                        <input class="with-label" type="email" id="endTime">
+                        <label class="floating-label" for="endTime">End Time</label>
+                    </div>
+                    <div class="input-wrapper">
+                        <textarea class="with-label" type="email" id="remarks"></textarea>
+                        <label class="floating-label" for="remarks">Remarks</label>
+                    </div>
+                    <br/>
+                    <br/>
+                </div>
+                <button class="btn positive"><i class="icon icon-check"></i> Start Activity</button>
+
+                <button style="float: right !important;" class="btn negative"><i class="icon icon-close"></i> Stop
+                    Activity
+                </button>
+            </div>
 
         </div>
 
@@ -23,9 +42,11 @@
 </template>
 
 <style scoped>
-    h1{
+    h1 {
         text-align: center !important;
-        padding:5px;
+        padding: 5px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #dee2e6 !important;
     }
 </style>
 <script>
@@ -37,7 +58,7 @@
                 task: '',
                 taskName: '',
                 action: null,
-                loading:false,
+                loading: false,
                 'rq': axios.create(),
             }
         },
