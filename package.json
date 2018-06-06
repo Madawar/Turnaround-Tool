@@ -28,6 +28,7 @@
     "vue": "^2.5.7"
   },
   "dependencies": {
+    "vue-masked-input": "^0.5.2",
     "vue-router": "^3.0.1"
   }
 }

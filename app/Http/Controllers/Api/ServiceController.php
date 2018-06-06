@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Service;
 use App\TaskHistory;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class ServiceController extends Controller
@@ -18,7 +19,7 @@ class ServiceController extends Controller
     {
         $tasks = Service::with('tasks')->get();
         $flightId = $request->flightId;
-        $tasks->map(function ($item)use($flightId) {
+        $tasks->map(function ($item) use ($flightId) {
             foreach ($item->tasks as $task) {
                 $stat = TaskHistory::where('serviceId', $task->serviceId)->where('taskId', $task->id)->where('flightId', $flightId)->first();
 
@@ -28,13 +29,20 @@ class ServiceController extends Controller
                     }
 
                     if ($stat->startTime != "" and $stat->endTime != "") {
-                        $task->status = 'Complete';
+
+                        $startTime = Carbon::createFromFormat('H:i:s', $stat->startTime);
+                        $endTime = Carbon::createFromFormat('H:i:s', $stat->endTime);
+                        if ($endTime->lessThan($startTime)) {
+                           $endTime =  $endTime->addDay();
+                        }
+                        $timing = $endTime->diffInMinutes($startTime);
+                        $task->status = 'Completed in ' . $timing . " Minutes";
                     }
 
                     if ($stat->startTime == "" and $stat->endTime == "") {
                         $task->status = 'Not Started';
                     }
-                }else{
+                } else {
                     $task->status = 'Not Started';
                 }
             }

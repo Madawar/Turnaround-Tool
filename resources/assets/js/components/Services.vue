@@ -16,7 +16,7 @@
                 <li class="divider">{{service.service}}</li>
                     <li v-for="task in service.tasks">
                         <router-link class="padded-list" :to="{ name:'task', params: {id: task.id,flt:id} }">
-                            <div class="pull-right"> {{task.status}}</div>
+                            <div style="width: 200px !important;" class="pull-right"> {{task.status}}</div>
                             {{task.task}}
 
                         </router-link>
@@ -29,7 +29,7 @@
 
 <style scoped>
     .list li .pull-left, .list li .pull-right {
-        width: 100px !important;
+        width: 200px !important;
     }
 </style>
 <script>

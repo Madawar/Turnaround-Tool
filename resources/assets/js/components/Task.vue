@@ -12,20 +12,20 @@
             <div v-if="loading" class="circle-progress active" style="visibility: visible; padding: 10px;">
                 <div class="spinner"></div>
             </div>
-            <div v-if="!loading">
+            <div >
                 <h1>{{task.task_nar}}</h1>
 
                 <div style="border-bottom: 1px solid #dee2e6!important; padding-bottom: 10px; margin-bottom: 10px;">
                     <div class="input-wrapper">
-                        <input class="with-label" type="email" v-model="startTime" id="startTime">
-                        <label class="floating-label" v-if="startTime == ''" for="startTime">Start Time</label>
+                        <input class="with-label" placeholder="Start Time Format 23:59" type="text" v-model="startTime" id="startTime">
+
                     </div>
                     <div class="input-wrapper">
-                        <input class="with-label" v-model="endTime" type="email" id="endTime">
-                        <label class="floating-label" v-if="endTime == ''" for="endTime">End Time</label>
+                        <input class="with-label" placeholder="End Time Format 23:59" v-model="endTime" type="text" id="endTime">
+
                     </div>
                     <div class="input-wrapper">
-                        <textarea class="with-label" type="email" id="remarks"></textarea>
+                        <textarea class="with-label" type="text" v-model="remarks" id="remarks"></textarea>
                         <label class="floating-label" for="remarks">Remarks</label>
                     </div>
                     <br/>
@@ -63,11 +63,13 @@
             return {
                 task: '',
                 taskName: '',
+                history_id:'',
                 action: null,
                 loading: false,
                 'rq': axios.create(),
-                startTime: '',
-                endTime: '',
+                startTime: null,
+                endTime: null,
+                remarks:''
             }
         },
         mounted() {
@@ -100,6 +102,7 @@
                     vm.startTime = response.data.startTime;
                     vm.endTime = response.data.endTime;
                     vm.remarks = response.data.remarks;
+                    vm.history_id = response.data.id;
                 })
                 .catch(function (error) {
                     console.log(error);
@@ -108,11 +111,34 @@
         },
         methods: {
             startTiming() {
-                this.startTime = moment().format('Hm');
+                this.startTime = moment().format('H:mm');
+                this.saveData();
             },
             endTiming() {
-                this.endTime = moment().format('Hm');
+                this.endTime = moment().format('H:mm');
+                this.saveData();
+            },
+            saveData() {
+                this.rq.patch('/api/task' + '/' + this.history_id, {
+                    startTime: this.startTime,
+                    endTime: this.endTime,
+                    remarks: this.remarks
+                })
+                    .then(function (response) {
+                        console.log(response.data)
+                        vm.task = response.data;
+                        vm.taskName = response.data.task_nar;
+                        vm.startTime = response.data.startTime;
+                        vm.endTime = response.data.endTime;
+                        vm.remarks = response.data.remarks;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             }
+        },
+        watch: {
+
         }
     }
 </script>

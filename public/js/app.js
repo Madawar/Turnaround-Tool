@@ -70874,7 +70874,7 @@ exports = module.exports = __webpack_require__(6)(false);
 
 
 // module
-exports.push([module.i, "\n.list li .pull-left[data-v-0b29d7d5], .list li .pull-right[data-v-0b29d7d5] {\n    width: 100px !important;\n}\n", ""]);
+exports.push([module.i, "\n.list li .pull-left[data-v-0b29d7d5], .list li .pull-right[data-v-0b29d7d5] {\n    width: 200px !important;\n}\n", ""]);
 
 // exports
 
@@ -71075,9 +71075,14 @@ var render = function() {
                             }
                           },
                           [
-                            _c("div", { staticClass: "pull-right" }, [
-                              _vm._v(" " + _vm._s(task.status))
-                            ]),
+                            _c(
+                              "div",
+                              {
+                                staticClass: "pull-right",
+                                staticStyle: { width: "200px !important" }
+                              },
+                              [_vm._v(" " + _vm._s(task.status))]
+                            ),
                             _vm._v(
                               "\n                        " +
                                 _vm._s(task.task) +
@@ -71221,11 +71226,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             task: '',
             taskName: '',
+            history_id: '',
             action: null,
             loading: false,
             'rq': axios.create(),
-            startTime: '',
-            endTime: ''
+            startTime: null,
+            endTime: null,
+            remarks: ''
         };
     },
     mounted: function mounted() {
@@ -71257,6 +71264,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             vm.startTime = response.data.startTime;
             vm.endTime = response.data.endTime;
             vm.remarks = response.data.remarks;
+            vm.history_id = response.data.id;
         }).catch(function (error) {
             console.log(error);
         });
@@ -71264,12 +71272,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
     methods: {
         startTiming: function startTiming() {
-            this.startTime = __WEBPACK_IMPORTED_MODULE_0_moment__().format('Hm');
+            this.startTime = __WEBPACK_IMPORTED_MODULE_0_moment__().format('H:mm');
+            this.saveData();
         },
         endTiming: function endTiming() {
-            this.endTime = __WEBPACK_IMPORTED_MODULE_0_moment__().format('Hm');
+            this.endTime = __WEBPACK_IMPORTED_MODULE_0_moment__().format('H:mm');
+            this.saveData();
+        },
+        saveData: function saveData() {
+            this.rq.patch('/api/task' + '/' + this.history_id, {
+                startTime: this.startTime,
+                endTime: this.endTime,
+                remarks: this.remarks
+            }).then(function (response) {
+                console.log(response.data);
+                vm.task = response.data;
+                vm.taskName = response.data.task_nar;
+                vm.startTime = response.data.startTime;
+                vm.endTime = response.data.endTime;
+                vm.remarks = response.data.remarks;
+            }).catch(function (error) {
+                console.log(error);
+            });
         }
-    }
+    },
+    watch: {}
 });
 
 /***/ }),
@@ -71596,144 +71623,138 @@ var render = function() {
             )
           : _vm._e(),
         _vm._v(" "),
-        !_vm.loading
-          ? _c("div", [
-              _c("h1", [_vm._v(_vm._s(_vm.task.task_nar))]),
-              _vm._v(" "),
-              _c(
-                "div",
-                {
-                  staticStyle: {
-                    "border-bottom": "1px solid #dee2e6!important",
-                    "padding-bottom": "10px",
-                    "margin-bottom": "10px"
+        _c("div", [
+          _c("h1", [_vm._v(_vm._s(_vm.task.task_nar))]),
+          _vm._v(" "),
+          _c(
+            "div",
+            {
+              staticStyle: {
+                "border-bottom": "1px solid #dee2e6!important",
+                "padding-bottom": "10px",
+                "margin-bottom": "10px"
+              }
+            },
+            [
+              _c("div", { staticClass: "input-wrapper" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.startTime,
+                      expression: "startTime"
+                    }
+                  ],
+                  staticClass: "with-label",
+                  attrs: {
+                    placeholder: "Start Time Format 23:59",
+                    type: "text",
+                    id: "startTime"
+                  },
+                  domProps: { value: _vm.startTime },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.startTime = $event.target.value
+                    }
                   }
-                },
-                [
-                  _c("div", { staticClass: "input-wrapper" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.startTime,
-                          expression: "startTime"
-                        }
-                      ],
-                      staticClass: "with-label",
-                      attrs: { type: "email", id: "startTime" },
-                      domProps: { value: _vm.startTime },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.startTime = $event.target.value
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.startTime == ""
-                      ? _c(
-                          "label",
-                          {
-                            staticClass: "floating-label",
-                            attrs: { for: "startTime" }
-                          },
-                          [_vm._v("Start Time")]
-                        )
-                      : _vm._e()
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "input-wrapper" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: _vm.endTime,
-                          expression: "endTime"
-                        }
-                      ],
-                      staticClass: "with-label",
-                      attrs: { type: "email", id: "endTime" },
-                      domProps: { value: _vm.endTime },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.endTime = $event.target.value
-                        }
-                      }
-                    }),
-                    _vm._v(" "),
-                    _vm.endTime == ""
-                      ? _c(
-                          "label",
-                          {
-                            staticClass: "floating-label",
-                            attrs: { for: "endTime" }
-                          },
-                          [_vm._v("End Time")]
-                        )
-                      : _vm._e()
-                  ]),
-                  _vm._v(" "),
-                  _vm._m(0),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("br")
-                ]
-              ),
+                })
+              ]),
               _vm._v(" "),
-              _c(
-                "button",
-                { staticClass: "btn positive", on: { click: _vm.startTiming } },
-                [
-                  _c("i", { staticClass: "icon icon-check" }),
-                  _vm._v(" Start Activity\n            ")
-                ]
-              ),
+              _c("div", { staticClass: "input-wrapper" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.endTime,
+                      expression: "endTime"
+                    }
+                  ],
+                  staticClass: "with-label",
+                  attrs: {
+                    placeholder: "End Time Format 23:59",
+                    type: "text",
+                    id: "endTime"
+                  },
+                  domProps: { value: _vm.endTime },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.endTime = $event.target.value
+                    }
+                  }
+                })
+              ]),
               _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn negative",
-                  staticStyle: { float: "right !important" },
-                  on: { click: _vm.endTiming }
-                },
-                [
-                  _c("i", { staticClass: "icon icon-close" }),
-                  _vm._v(" Stop\n                Activity\n            ")
-                ]
-              )
-            ])
-          : _vm._e()
+              _c("div", { staticClass: "input-wrapper" }, [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.remarks,
+                      expression: "remarks"
+                    }
+                  ],
+                  staticClass: "with-label",
+                  attrs: { type: "text", id: "remarks" },
+                  domProps: { value: _vm.remarks },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.remarks = $event.target.value
+                    }
+                  }
+                }),
+                _vm._v(" "),
+                _c(
+                  "label",
+                  { staticClass: "floating-label", attrs: { for: "remarks" } },
+                  [_vm._v("Remarks")]
+                )
+              ]),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("br")
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            { staticClass: "btn positive", on: { click: _vm.startTiming } },
+            [
+              _c("i", { staticClass: "icon icon-check" }),
+              _vm._v(" Start Activity\n            ")
+            ]
+          ),
+          _vm._v(" "),
+          _c(
+            "button",
+            {
+              staticClass: "btn negative",
+              staticStyle: { float: "right !important" },
+              on: { click: _vm.endTiming }
+            },
+            [
+              _c("i", { staticClass: "icon icon-close" }),
+              _vm._v(" Stop\n                Activity\n            ")
+            ]
+          )
+        ])
       ])
     ]
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-wrapper" }, [
-      _c("textarea", {
-        staticClass: "with-label",
-        attrs: { type: "email", id: "remarks" }
-      }),
-      _vm._v(" "),
-      _c(
-        "label",
-        { staticClass: "floating-label", attrs: { for: "remarks" } },
-        [_vm._v("Remarks")]
-      )
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
