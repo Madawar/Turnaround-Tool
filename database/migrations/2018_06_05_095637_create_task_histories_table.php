@@ -16,7 +16,8 @@ class CreateTaskHistoriesTable extends Migration
         Schema::create('task_histories', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('serviceId')->unsigned();
-            $table->integer('taskIdId')->unsigned();
+            $table->integer('taskId')->unsigned();
+            $table->integer('flightId')->unsigned();
             $table->boolean('completed')->nullable();
             $table->time('startTime')->nullable();
             $table->time('timeOfAction')->nullable();

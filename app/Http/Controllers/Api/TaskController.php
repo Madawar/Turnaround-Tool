@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Task;
+use App\TaskHistory;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
@@ -45,9 +46,17 @@ class TaskController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show($id, Request $request)
     {
-        return Task::find($id);
+        $task = Task::find($id);
+        $history = TaskHistory::firstOrCreate(array(
+            'serviceId' => $task->serviceId,
+            'taskId' => $task->id,
+            'flightId' => $request->flt
+        ));
+        $history->task_nar = $history->task->task;
+        $history->service_nar = $history->service->service;
+        return $history;
     }
 
     /**

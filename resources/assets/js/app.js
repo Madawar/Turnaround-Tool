@@ -14,9 +14,12 @@ import VueRouter from 'vue-router'
 import Flight from './components/Flights';
 import Service from './components/Services';
 import Task from './components/Task';
+var moment = require('moment');
+
 
 Vue.use(phonon);
 Vue.use(VueRouter);
+Vue.use(moment);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -43,7 +46,7 @@ window.router = new VueRouter({
             props: true
         },
         {
-            path: '/tasks/:id',
+            path: '/tasks/:id/:flt',
             component: Task,
             name: 'task',
             props: true
