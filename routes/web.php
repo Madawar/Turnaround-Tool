@@ -16,4 +16,5 @@ Route::get('/pda', function () {
 });
 
 Route::resource('flight', 'FlightController');
+Route::resource('service', 'ServiceController');
 

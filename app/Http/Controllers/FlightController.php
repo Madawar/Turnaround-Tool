@@ -51,10 +51,12 @@ class FlightController extends Controller
         $services = Service::with('tasks')->get();
         $flightId = $id;
         $services->map(function ($item) use ($flightId) {
+            $item->rows = 0;
             foreach ($item->tasks as $task) {
                 $stat = TaskHistory::where('serviceId', $task->serviceId)->where('taskId', $task->id)->where('flightId', $flightId)->first();
 
                 if (count($stat)) {
+
                     $task->startTime = $stat->startTime;
                     $task->endTime = $stat->endTime;
                     if ($stat->startTime != "" and $stat->endTime == "") {
@@ -62,7 +64,7 @@ class FlightController extends Controller
                     }
 
                     if ($stat->startTime != "" and $stat->endTime != "") {
-
+                        $item->rows = $item->rows + 1;
                         $startTime = Carbon::createFromFormat('H:i:s', $stat->startTime);
                         $endTime = Carbon::createFromFormat('H:i:s', $stat->endTime);
                         if ($endTime->lessThan($startTime)) {
@@ -70,9 +72,13 @@ class FlightController extends Controller
                         }
                         $timing = $endTime->diffInMinutes($startTime);
                         $hours = $endTime->diffInHours($startTime);
+                        $milli = $endTime->diffInSeconds($startTime)*1000;
                         $task->minutes = $timing;
+                        $task->milli = $milli;
                         $task->remarks = $stat->remarks;
                         $task->status = 'Completed in ' . $timing . " Minutes";
+                        $task->modEndTime = $endTime->format('D M d Y H:i:s O');
+                        $task->modStartTime = $startTime->format('D M d Y H:i:s O');
                     }
 
                     if ($stat->startTime == "" and $stat->endTime == "") {

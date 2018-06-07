@@ -52,6 +52,18 @@ class ServiceController extends Controller
         return $tasks;
     }
 
+    public function page()
+    {
+        $service = Service::with('tasks')->paginate();
+        $service->map(function ($item) {
+            $item['view'] = action('ServiceController@show', $item->id);
+            $item['edit'] = action('ServiceController@edit', $item->id);
+            $item['delete'] = action('ServiceController@destroy', $item->id);
+            return $item;
+        });
+        return $service;
+    }
+
     /**
      * Show the form for creating a new resource.
      *

@@ -19,5 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('/flight', 'Api\FlightController');
 Route::get('/flt/page', 'Api\FlightController@page');
+Route::get('/service/page', 'Api\ServiceController@page');
 Route::resource('/service', 'Api\ServiceController');
 Route::resource('/task', 'Api\TaskController');

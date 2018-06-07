@@ -25,6 +25,7 @@
     <!-- Dashboard Core -->
     <link rel="stylesheet" href="{{url('css/bundle.css')}}" type="text/css" media="all"/>
     <link rel="stylesheet" href="{{url('css/dashboard.css')}}" type="text/css" media="all"/>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="//rubaxa.github.io/Sortable/Sortable.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>
