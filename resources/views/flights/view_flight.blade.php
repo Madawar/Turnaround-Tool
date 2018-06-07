@@ -89,7 +89,7 @@
             ]);
 
             var options = {
-                height: {{$rows * 46}},
+                height: {{$rows * 48}},
                 gantt: {
                     defaultStartDateMillis: new Date(2015, 3, 28)
                 }
