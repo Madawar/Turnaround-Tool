@@ -8,18 +8,19 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-import 'phonon/dist/css/phonon.css'
+
 import phonon from 'phonon/dist/js/phonon-core'
 import VueRouter from 'vue-router'
 import Flight from './components/Flights';
 import Service from './components/Services';
 import Task from './components/Task';
 var moment = require('moment');
-
+var debounce = require('debounce');
 
 Vue.use(phonon);
 Vue.use(VueRouter);
 Vue.use(moment);
+Vue.use(debounce);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -32,12 +33,14 @@ Vue.component('flight', require('./components/Flights'));
 Vue.component('services', require('./components/Services'));
 Vue.component('task', require('./components/Task'));
 Vue.component('app', require('./components/App'));
+Vue.component('sl', require('./components/selectize/selectize'));
+Vue.component('vtable', require('./components/Table/Table'));
 
 window.router = new VueRouter({
     mode: 'history',
     routes: [
         {
-            path: '/', component: Flight
+            path: '/pda', component: Flight
         },
         {
             path: '/services/:id/:flt',

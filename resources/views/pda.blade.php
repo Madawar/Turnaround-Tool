@@ -2,7 +2,7 @@
 <html>
 <head>
     <!-- ... metas and styles ... -->
-    <link rel="stylesheet" href="{{url('css/f7.css')}}" type="text/css" media="all"/>
+    <link rel="stylesheet" href="{{url('css/pda.css')}}" type="text/css" media="all"/>
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
 </head>

@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/pda', function () {
     return view('pda');
 });
+
+Route::resource('flight', 'FlightController');
+

@@ -18,8 +18,10 @@ class CreateFlightsTable extends Migration
             $table->integer('carrier')->unsigned();
             $table->string('flightNo')->nullable();
             $table->date('flightDate')->nullable();
-            $table->time('arrival')->nullable();
-            $table->time('departure')->nullable();
+            $table->dateTime('arrival')->nullable();
+            $table->dateTime('departure')->nullable();
+            $table->dateTime('STA')->nullable();
+            $table->dateTime('STD')->nullable();
             $table->boolean('completed')->nullable();
             $table->timestamps();
         });

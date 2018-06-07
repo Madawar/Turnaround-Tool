@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Flight;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+
 class FlightController extends Controller
 {
     /**
@@ -19,17 +20,29 @@ class FlightController extends Controller
         $flights->map(function ($item) {
             $varDate = Carbon::createFromFormat('Y-m-d', $item->flightDate);
             $item->flightDate = $varDate->format('jS-M-y');
-            $item->flt = $item->cx->carrier.'-'.$item->flightNo;
-            if($varDate->isToday()){
+            $item->flt = $item->cx->carrier . '-' . $item->flightNo;
+            if ($varDate->isToday()) {
                 $item->narration = 'Today';
-            }elseif($varDate->isTomorrow()){
+            } elseif ($varDate->isTomorrow()) {
                 $item->narration = 'Tomorrow';
-            }elseif($varDate->isYesterday()){
+            } elseif ($varDate->isYesterday()) {
                 $item->narration = 'Yesterday';
             }
             return $item;
         });
         return $flights;
+    }
+
+    public function page()
+    {
+        $flight = Flight::with('cx')->paginate();
+        $flight->map(function ($item) {
+            $item['view'] = action('FlightController@show', $item->id);
+            $item['edit'] = action('FlightController@edit', $item->id);
+            $item['delete'] = action('FlightController@destroy', $item->id);
+            return $item;
+        });
+        return $flight;
     }
 
     /**

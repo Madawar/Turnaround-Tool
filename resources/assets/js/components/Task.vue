@@ -12,16 +12,18 @@
             <div v-if="loading" class="circle-progress active" style="visibility: visible; padding: 10px;">
                 <div class="spinner"></div>
             </div>
-            <div >
+            <div>
                 <h1>{{task.task_nar}}</h1>
 
                 <div style="border-bottom: 1px solid #dee2e6!important; padding-bottom: 10px; margin-bottom: 10px;">
                     <div class="input-wrapper">
-                        <input class="with-label" placeholder="Start Time Format 23:59" type="text" v-model="startTime" id="startTime">
+                        <input class="with-label" placeholder="Start Time Format 23:59" type="text" v-model="startTime"
+                               id="startTime">
 
                     </div>
                     <div class="input-wrapper">
-                        <input class="with-label" placeholder="End Time Format 23:59" v-model="endTime" type="text" id="endTime">
+                        <input class="with-label" placeholder="End Time Format 23:59" v-model="endTime" type="text"
+                               id="endTime">
 
                     </div>
                     <div class="input-wrapper">
@@ -55,6 +57,7 @@
 </style>
 <script>
     import * as moment from 'moment';
+    import _ from 'lodash'
 
     export default {
         name: 'task',
@@ -63,13 +66,13 @@
             return {
                 task: '',
                 taskName: '',
-                history_id:'',
+                history_id: '',
                 action: null,
                 loading: false,
                 'rq': axios.create(),
                 startTime: null,
                 endTime: null,
-                remarks:''
+                remarks: ''
             }
         },
         mounted() {
@@ -111,14 +114,15 @@
         },
         methods: {
             startTiming() {
-                this.startTime = moment().format('H:mm');
+                this.startTime = moment().format('HH:mm');
                 this.saveData();
             },
             endTiming() {
-                this.endTime = moment().format('H:mm');
+                this.endTime = moment().format('HH:mm');
                 this.saveData();
             },
-            saveData() {
+            saveData: _.debounce(function () {
+                var vm = this;
                 this.rq.patch('/api/task' + '/' + this.history_id, {
                     startTime: this.startTime,
                     endTime: this.endTime,
@@ -126,19 +130,32 @@
                 })
                     .then(function (response) {
                         console.log(response.data)
-                        vm.task = response.data;
-                        vm.taskName = response.data.task_nar;
-                        vm.startTime = response.data.startTime;
-                        vm.endTime = response.data.endTime;
-                        vm.remarks = response.data.remarks;
+
+
                     })
                     .catch(function (error) {
                         console.log(error);
                     });
-            }
+            }, 1000)
         },
         watch: {
+            startTime: function (val, oldVal) {
+                if (val != oldVal) {
+                    this.saveData();
+                }
+            },
+            endTime: function (val, oldVal) {
+                if (val != oldVal) {
+                    this.saveData();
+                }
+            },
+            remarks: function (val, oldVal) {
+                if (val != oldVal) {
+                    this.saveData();
+                }
+            },
 
         }
+
     }
 </script>

@@ -11,6 +11,17 @@ let mix = require('laravel-mix');
  |
  */
 
-mix.js('resources/assets/js/app.js', 'public/js')
-    .styles('node_modules/framework7/dist/css/framework7.css','public/css/f7.css')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+mix.js('resources/assets/js/app.js', 'public/js');
+//.sass('resources/assets/sass/bundle.scss', 'public/css');
+//.sass('resources/assets/plugins/**/plugin.scss', 'public/css');
+
+mix.styles(
+    'node_modules/phonon/dist/css/phonon.css', 'public/css/pda.css'
+);
+mix.scripts([
+    'resources/assets/vendors/jquery-3.2.1.min.js',
+    'resources/assets/vendors/selectize.min.js'
+], 'public/js/plugins.js');
+
+
+
