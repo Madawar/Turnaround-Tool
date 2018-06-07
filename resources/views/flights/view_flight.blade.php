@@ -29,7 +29,7 @@
                     </tr>
                     @foreach($services as $service)
                         <tr>
-                            <td style="font-weight: bold; background: #f6fbff;" colspan="7">{{$service->service}}</td>
+                            <td style="font-weight: bold; background: #f6fbff;" colspan="8">{{$service->service}}</td>
                         </tr>
                         <?php $count = 0 ?>
                         @foreach($service->tasks as $task)
@@ -78,18 +78,19 @@
 
             otherData.addRows([
                 <?php $rows = 0 ?>
+                ['ATA', 'Flight Arrival {{$flight->flightNo}}','Flight Arrival {{$flight->flightNo}}', new Date('{{$flight->arrival}}'), new Date('{{$flight->startTime}}'), null, 100, null],
                     @foreach($services as $service)
                     @foreach($service->tasks as $task)
                     @if($task->modStartTime !="")
                     <?php $rows = $rows +1?>
-                    ['{{$task->id}}', '{{$task->task}}','{{$task->task}}', new Date('{{$task->modStartTime}}'), new Date('{{$task->modEndTime}}'), null, 100, null],
+                    ['{{$task->id}}', '{{$task->task}}','{{$task->task}}', new Date('{{$task->modStartTime}}'), new Date('{{$task->modEndTime}}'), null, 100, 'ATA'],
                   @endif
                     @endforeach
                     @endforeach
             ]);
 
             var options = {
-                height: {{$rows * 52}},
+                height: {{$rows * 80}},
                 gantt: {
                     defaultStartDateMillis: new Date(2015, 3, 28)
                 }

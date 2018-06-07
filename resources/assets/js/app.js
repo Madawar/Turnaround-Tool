@@ -14,6 +14,9 @@ import VueRouter from 'vue-router'
 import Flight from './components/Flights';
 import Service from './components/Services';
 import Task from './components/Task';
+import { Datetime } from 'vue-datetime';
+import 'vue-datetime/dist/vue-datetime.css'
+
 var moment = require('moment');
 var debounce = require('debounce');
 
@@ -22,12 +25,14 @@ Vue.use(VueRouter);
 Vue.use(moment);
 Vue.use(debounce);
 
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
-
+Vue.component('datetime', Datetime);
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('flight', require('./components/Flights'));
 Vue.component('services', require('./components/Services'));

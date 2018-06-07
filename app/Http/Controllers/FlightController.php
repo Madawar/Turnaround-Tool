@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Flight;
 use App\Service;
 use App\TaskHistory;
 use Carbon\Carbon;
@@ -48,6 +49,11 @@ class FlightController extends Controller
      */
     public function show($id)
     {
+        $flight = Flight::find($id);
+        $time = $flight->arrival;
+        $flight->arrival = Carbon::createFromFormat('Y-m-d H:i:s', $flight->arrival)->format('D M d Y H:i:s O');
+        $flight->startTime = Carbon::createFromFormat('Y-m-d H:i:s', $time)->addMinute(5)->format('D M d Y H:i:s O');
+
         $services = Service::with('tasks')->get();
         $flightId = $id;
         $services->map(function ($item) use ($flightId) {
@@ -72,7 +78,7 @@ class FlightController extends Controller
                         }
                         $timing = $endTime->diffInMinutes($startTime);
                         $hours = $endTime->diffInHours($startTime);
-                        $milli = $endTime->diffInSeconds($startTime)*1000;
+                        $milli = $endTime->diffInSeconds($startTime) * 1000;
                         $task->minutes = $timing;
                         $task->milli = $milli;
                         $task->remarks = $stat->remarks;
@@ -91,7 +97,7 @@ class FlightController extends Controller
 
             return $item;
         });
-        return view('flights.view_flight')->with(compact('services'));
+        return view('flights.view_flight')->with(compact('services', 'flight'));
     }
 
     /**
@@ -102,7 +108,8 @@ class FlightController extends Controller
      */
     public function edit($id)
     {
-        //
+        $flight = Flight::find($id);
+        return view('flights.create_flight')->with(compact('flight'));
     }
 
     /**
