@@ -78,7 +78,7 @@
 		<span class="input-group-prepend" id="STA">
 			<span class="input-group-text"><i class="fa fa-calendar"></i></span>
         </span>
-                                    <datetime class="form-control" name="STA" type="datetime" v-model="sta"></datetime>
+                                    <datetime input-class="form-control"  name="STA" type="datetime" v-model="sta"></datetime>
 
                                     {!! $errors->first('STA', '<p class="invalid-feedback">:message</p>') !!}
                                 </div>

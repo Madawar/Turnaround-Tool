@@ -77,7 +77,7 @@
             otherData.addColumn('string', 'Dependencies');
 
             otherData.addRows([
-                <?php $rows = 0 ?>
+                <?php $rows = 1 ?>
                 ['ATA', 'Flight Arrival {{$flight->flightNo}}','Flight Arrival {{$flight->flightNo}}', new Date('{{$flight->arrival}}'), new Date('{{$flight->startTime}}'), null, 100, null],
                     @foreach($services as $service)
                     @foreach($service->tasks as $task)
@@ -90,7 +90,7 @@
             ]);
 
             var options = {
-                height: {{$rows * 80}},
+                height: {{$rows * 65}},
                 gantt: {
                     defaultStartDateMillis: new Date(2015, 3, 28)
                 }
