@@ -17,6 +17,7 @@
                     <h3 class="card-title">Flight Report</h3>
                 </div>
                 <div id="chart_div"></div>
+                <div id='png'></div>
                 <table class="table card-table table-vcenter text-nowrap">
                     <tr>
                         <th>#</th>
@@ -57,48 +58,58 @@
 
 @section('jquery')
     <script type="text/javascript">
-        google.charts.load('current', {'packages': ['gantt']});
-        google.charts.setOnLoadCallback(drawChart);
 
-        function toMilliseconds(minutes) {
-            return minutes * 60 * 1000;
-        }
+        app = new Vue({
+            el: '#app',
+            mounted(){
+                google.charts.load('current', {'packages': ['gantt']});
+                google.charts.setOnLoadCallback(drawChart);
 
-        function drawChart() {
-
-            var otherData = new google.visualization.DataTable();
-            otherData.addColumn('string', 'Task ID');
-            otherData.addColumn('string', 'Task Name');
-            otherData.addColumn('string', 'Resource');
-            otherData.addColumn('date', 'Start');
-            otherData.addColumn('date', 'End');
-            otherData.addColumn('number', 'Duration');
-            otherData.addColumn('number', 'Percent Complete');
-            otherData.addColumn('string', 'Dependencies');
-
-            otherData.addRows([
-                <?php $rows = 1 ?>
-                ['ATA', 'Flight Arrival {{$flight->flightNo}}','Flight Arrival {{$flight->flightNo}}', new Date('{{$flight->arrival}}'), new Date('{{$flight->startTime}}'), null, 100, null],
-                    @foreach($services as $service)
-                    @foreach($service->tasks as $task)
-                    @if($task->modStartTime !="")
-                    <?php $rows = $rows +1?>
-                    ['{{$task->id}}', '{{$task->task}}','{{$task->task}}', new Date('{{$task->modStartTime}}'), new Date('{{$task->modEndTime}}'), null, 100, 'ATA'],
-                  @endif
-                    @endforeach
-                    @endforeach
-            ]);
-
-            var options = {
-                height: {{$rows * 65}},
-                gantt: {
-                    defaultStartDateMillis: new Date(2015, 3, 28)
+                function toMilliseconds(minutes) {
+                    return minutes * 60 * 1000;
                 }
-            };
 
-            var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+                function drawChart() {
 
-            chart.draw(otherData, options);
-        }
+                    var otherData = new google.visualization.DataTable();
+                    otherData.addColumn('string', 'Task ID');
+                    otherData.addColumn('string', 'Task Name');
+                    otherData.addColumn('string', 'Resource');
+                    otherData.addColumn('date', 'Start');
+                    otherData.addColumn('date', 'End');
+                    otherData.addColumn('number', 'Duration');
+                    otherData.addColumn('number', 'Percent Complete');
+                    otherData.addColumn('string', 'Dependencies');
+
+                    otherData.addRows([
+                            <?php $rows = 1 ?>
+                        ['ATA', 'Flight Arrival {{$flight->flightNo}}','Flight Arrival {{$flight->flightNo}}', new Date('{{$flight->arrival}}'), new Date('{{$flight->startTime}}'), null, 100, null],
+                            @foreach($services as $service)
+                            @foreach($service->tasks as $task)
+                            @if($task->modStartTime !="")
+                            <?php $rows = $rows +1?>
+                        ['{{$task->id}}', '{{$task->task}}','{{$task->task}}', new Date('{{$task->modStartTime}}'), new Date('{{$task->modEndTime}}'), null, 100, 'ATA'],
+                        @endif
+                        @endforeach
+                        @endforeach
+                    ]);
+
+                    var options = {
+                        height: {{$rows * 65}},
+                        gantt: {
+                            defaultStartDateMillis: new Date(2015, 3, 28)
+                        }
+                    };
+
+                    var chart = new google.visualization.Gantt(document.getElementById('chart_div'));
+
+                    chart.draw(otherData, options);
+                    document.getElementById('png').outerHTML = '<a href="' + chart.getImageURI() + '">Printable version</a>';
+                }
+            },
+            data: {}
+        });
+
+
     </script>
 @endsection

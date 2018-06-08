@@ -72344,17 +72344,6 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("div", { staticClass: "content padded-full" }, [
-        _vm.loading
-          ? _c(
-              "div",
-              {
-                staticClass: "circle-progress active",
-                staticStyle: { visibility: "visible", padding: "10px" }
-              },
-              [_c("div", { staticClass: "spinner" })]
-            )
-          : _vm._e(),
-        _vm._v(" "),
         _c("div", [
           _c("h1", [_vm._v(_vm._s(_vm.task.task_nar))]),
           _vm._v(" "),
@@ -72480,7 +72469,18 @@ var render = function() {
               _c("i", { staticClass: "icon icon-close" }),
               _vm._v(" Stop\n                Activity\n            ")
             ]
-          )
+          ),
+          _vm._v(" "),
+          _vm.loading
+            ? _c(
+                "div",
+                {
+                  staticClass: "circle-progress active",
+                  staticStyle: { visibility: "visible", padding: "10px" }
+                },
+                [_c("div", { staticClass: "spinner" })]
+              )
+            : _vm._e()
         ])
       ])
     ]
@@ -81506,7 +81506,7 @@ var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(249)
 /* template */
-var __vue_template__ = __webpack_require__(325)
+var __vue_template__ = __webpack_require__(328)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -81604,6 +81604,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__FilterBar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5__FilterBar__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__CustomActions__ = __webpack_require__(320);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__CustomActions___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_6__CustomActions__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__DetailRow__ = __webpack_require__(325);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__DetailRow___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_7__DetailRow__);
+//
 //
 //
 //
@@ -81674,9 +81677,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+
 __WEBPACK_IMPORTED_MODULE_3_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_4_vue_events___default.a);
 __WEBPACK_IMPORTED_MODULE_3_vue___default.a.component('filter-bar', __WEBPACK_IMPORTED_MODULE_5__FilterBar___default.a);
 __WEBPACK_IMPORTED_MODULE_3_vue___default.a.component('custom-actions', __WEBPACK_IMPORTED_MODULE_6__CustomActions___default.a);
+__WEBPACK_IMPORTED_MODULE_3_vue___default.a.component('my-detail-row', __WEBPACK_IMPORTED_MODULE_7__DetailRow___default.a);
 /* harmony default export */ __webpack_exports__["default"] = ({
     components: {
         Vuetable: __WEBPACK_IMPORTED_MODULE_0_vuetable_2_src_components_Vuetable___default.a,
@@ -81729,8 +81734,9 @@ __WEBPACK_IMPORTED_MODULE_3_vue___default.a.component('custom-actions', __WEBPAC
             return item.color;
         },
         destroyItem: function destroyItem(item) {},
-        onCellClicked: function onCellClicked(item) {
-            console.log(item);
+        onCellClicked: function onCellClicked(data, field, event) {
+            console.log('cellClicked: ', field.name);
+            this.$refs.vuetable.toggleDetailRow(data.id);
         },
         onChangePage: function onChangePage(page) {
             this.$refs.vuetable.changePage(page);
@@ -86891,6 +86897,171 @@ if (false) {
 /* 325 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var disposed = false
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(326)
+/* template */
+var __vue_template__ = __webpack_require__(327)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = null
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources\\assets\\js\\components\\DetailRow.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-370ba9e2", Component.options)
+  } else {
+    hotAPI.reload("data-v-370ba9e2", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 326 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: {
+        rowData: {
+            type: Object,
+            required: true
+        },
+        rowIndex: {
+            type: Number
+        }
+    },
+    methods: {
+        onClick: function onClick(event) {
+            console.log('my-detail-row: on-click', event.target);
+        }
+    }
+});
+
+/***/ }),
+/* 327 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { on: { click: _vm.onClick } }, [
+    _vm.rowData != ""
+      ? _c(
+          "table",
+          {
+            staticClass: "table card-table table-vcenter text-nowrap table-sm"
+          },
+          [
+            _vm._m(0),
+            _vm._v(" "),
+            _vm._l(_vm.rowData.tasks, function(row) {
+              return _c("tr", [
+                _c("td", [_vm._v(_vm._s(row.taskName))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(row.status))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(row.startTime))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(row.endTime))]),
+                _vm._v(" "),
+                _c("td", [_vm._v(_vm._s(row.minutes))])
+              ])
+            })
+          ],
+          2
+        )
+      : _vm._e(),
+    _vm._v(" "),
+    _vm.rowData == ""
+      ? _c("div", { staticClass: "text-center" }, [
+          _c("b", [_vm._v("No Data Yet")])
+        ])
+      : _vm._e()
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("th", [_vm._v("Task Name")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Status")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Start Time")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("End Time")]),
+      _vm._v(" "),
+      _c("th", [_vm._v("Minutes")])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-370ba9e2", module.exports)
+  }
+}
+
+/***/ }),
+/* 328 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
@@ -86966,7 +87137,8 @@ var render = function() {
             "row-class": _vm.rowColor,
             css: _vm.css.table,
             "append-params": _vm.moreParams,
-            "multi-sort": true
+            "multi-sort": true,
+            "detail-row-component": "my-detail-row"
           },
           on: {
             "vuetable:loading": _vm.showLoader,

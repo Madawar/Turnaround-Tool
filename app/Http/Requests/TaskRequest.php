@@ -24,8 +24,8 @@ class TaskRequest extends FormRequest
     public function rules()
     {
         return [
-            'startTime'=>'nullable|date_format:H:i',
-            'endTime'=>'nullable|date_format:H:i',
+            //'startTime'=>'nullable|date_format:H:i',
+           // 'endTime'=>'nullable|date_format:H:i',
         ];
     }
 }

@@ -35,8 +35,35 @@ class FlightController extends Controller
 
     public function page()
     {
-        $flight = Flight::with('cx')->paginate();
+        $flight = Flight::with('cx', 'tasks.task')->paginate();
         $flight->map(function ($item) {
+            $item->tasks->map(function ($task) {
+                $task->taskName = $task->task->task;
+                if ($task->startTime != "" and $task->endTime == "") {
+                    $task->status = 'Ongoing';
+                }
+                if ($task->startTime != "" and $task->endTime != "") {
+                    $startTime = Carbon::createFromFormat('H:i:s', $task->startTime);
+                    $endTime = Carbon::createFromFormat('H:i:s', $task->endTime);
+                    if ($endTime->lessThan($startTime)) {
+                        $endTime = $endTime->addDay();
+                    }
+                    $timing = $endTime->diffInMinutes($startTime);
+                    $hours = $endTime->diffInHours($startTime);
+                    $milli = $endTime->diffInSeconds($startTime) * 1000;
+                    $task->minutes = $timing;
+                    $task->milli = $milli;
+                    $task->remarks = $task->remarks;
+                    $task->status = 'Completed in ' . $timing . " Minutes";
+                    $task->modEndTime = $endTime->format('D M d Y H:i:s O');
+                    $task->modStartTime = $startTime->format('D M d Y H:i:s O');
+                }
+
+                if ($task->startTime == "" and $task->endTime == "") {
+                    $task->status = 'Not Started';
+                }
+            });
+
             $item['view'] = action('FlightController@show', $item->id);
             $item['edit'] = action('FlightController@edit', $item->id);
             $item['delete'] = action('FlightController@destroy', $item->id);
@@ -50,7 +77,8 @@ class FlightController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public
+    function create()
     {
         //
     }
@@ -61,7 +89,8 @@ class FlightController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public
+    function store(Request $request)
     {
         //
     }
@@ -72,7 +101,8 @@ class FlightController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public
+    function show($id)
     {
         //
     }
@@ -83,7 +113,8 @@ class FlightController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public
+    function edit($id)
     {
         //
     }
@@ -95,7 +126,8 @@ class FlightController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public
+    function update(Request $request, $id)
     {
         //
     }
@@ -106,7 +138,8 @@ class FlightController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public
+    function destroy($id)
     {
         //
     }

@@ -16,4 +16,9 @@ class Flight extends Model
     {
         return $this->hasOne('App\Carrier', 'id', 'carrier');
     }
+
+    public function tasks()
+    {
+        return $this->hasMany('App\TaskHistory', 'flightId', 'id');
+    }
 }

@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use Helper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\TaskRequest;
 use App\Task;
 use App\TaskHistory;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+
 
 class TaskController extends Controller
 {
@@ -87,8 +89,11 @@ class TaskController extends Controller
      */
     public function update(Request $request, $id, TaskRequest $form)
     {
+        $params = $request->all();
+        $params['startTime'] = Helper::formatTime($request->startTime);
+        $params['endTime'] = Helper::formatTime($request->endTime);
         $task = TaskHistory::find($id);
-        $task->update($request->all());
+        $task->update($params);
         return TaskHistory::find($id);
     }
 

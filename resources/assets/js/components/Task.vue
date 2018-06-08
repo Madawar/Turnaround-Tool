@@ -9,9 +9,6 @@
             </div>
         </header>
         <div class="content padded-full">
-            <div v-if="loading" class="circle-progress active" style="visibility: visible; padding: 10px;">
-                <div class="spinner"></div>
-            </div>
             <div>
                 <h1>{{task.task_nar}}</h1>
 
@@ -40,6 +37,9 @@
                         class="icon icon-close"></i> Stop
                     Activity
                 </button>
+                <div v-if="loading" class="circle-progress active" style="visibility: visible; padding: 10px;">
+                    <div class="spinner"></div>
+                </div>
             </div>
 
         </div>
@@ -129,9 +129,7 @@
                     remarks: this.remarks
                 })
                     .then(function (response) {
-                        console.log(response.data)
-
-
+                        console.log(response.data);
                     })
                     .catch(function (error) {
                         console.log(error);

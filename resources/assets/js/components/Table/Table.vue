@@ -35,6 +35,7 @@
                     @vuetable:loading="showLoader"
                     @vuetable:loaded="hideLoader"
                     @vuetable:pagination-data="onPaginationData"
+                    detail-row-component="my-detail-row"
                     @vuetable:cell-clicked="onCellClicked"
             ></vuetable>
             <div class="vuetable-pagination">
@@ -67,10 +68,12 @@
     import VueEvents from 'vue-events'
     import FilterBar from './FilterBar'
     import CustomActions from './CustomActions'
+    import DetailRow from '../DetailRow'
 
     Vue.use(VueEvents)
     Vue.component('filter-bar', FilterBar)
     Vue.component('custom-actions', CustomActions)
+    Vue.component('my-detail-row', DetailRow)
     export default {
         components: {
             Vuetable,
@@ -126,8 +129,9 @@
             destroyItem: function (item) {
 
             },
-            onCellClicked: function (item) {
-                console.log(item);
+            onCellClicked: function (data, field, event) {
+                console.log('cellClicked: ', field.name)
+                this.$refs.vuetable.toggleDetailRow(data.id)
             },
             onChangePage(page) {
                 this.$refs.vuetable.changePage(page)
