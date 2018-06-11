@@ -16,7 +16,8 @@ class CreateCarriersTable extends Migration
         Schema::create('carriers', function (Blueprint $table) {
             $table->increments('id');
             $table->string('carrier')->nullable();
-            $table->json('linkedTasks')->nullable();
+            $table->time('freighterTurnaroundTime')->nullable();
+            $table->time('passengerTurnaroundTime')->nullable();
             $table->timestamps();
         });
     }

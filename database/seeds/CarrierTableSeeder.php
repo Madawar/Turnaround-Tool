@@ -12,7 +12,9 @@ class CarrierTableSeeder extends Seeder
     public function run()
     {
         \App\Carrier::create(array(
-            'carrier' => 'EK'
+            'carrier' => 'EK',
+            'freighterTurnaroundTime'=>'2:15:00',
+            'passengerTurnaroundTime'=>'1:15:00'
         ));
     }
 }

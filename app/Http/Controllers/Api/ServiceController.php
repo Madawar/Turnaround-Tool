@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Flight;
 use App\Http\Controllers\Controller;
 use App\Service;
-use App\TaskHistory;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -17,48 +17,56 @@ class ServiceController extends Controller
      */
     public function index(Request $request)
     {
-        $tasks = Service::with('tasks')->get();
-        $flightId = $request->flightId;
-        $tasks->map(function ($item) use ($flightId) {
-            foreach ($item->tasks as $task) {
-                $stat = TaskHistory::where('serviceId', $task->serviceId)->where('taskId', $task->id)->where('flightId', $flightId)->first();
-
-                if (count($stat)) {
-                    if ($stat->startTime != "" and $stat->endTime == "") {
+        $flight = Flight::with('services.tasks.records')->with('tasks')->find($request->flightId);
+        $flight->services->map(function ($service, $key) use ($flight) {
+            $service->tasks->map(function ($task, $key) use ($flight) {
+                $flight->rows = 0;
+                $record = $flight->tasks->where('taskId', $task->id)->first();
+                if ($record) {
+                    $task->startTime = $record->startTime;
+                    $task->endTime = $record->endTime;
+                    if ($record->startTime != "" and $record->endTime == "") {
                         $task->status = 'Ongoing';
                     }
-
-                    if ($stat->startTime != "" and $stat->endTime != "") {
-
-                        $startTime = Carbon::createFromFormat('H:i:s', $stat->startTime);
-                        $endTime = Carbon::createFromFormat('H:i:s', $stat->endTime);
+                    if ($record->startTime != "" and $record->endTime != "") {
+                        $startTime = Carbon::createFromFormat('H:i:s', $record->startTime);
+                        $endTime = Carbon::createFromFormat('H:i:s', $record->endTime);
                         if ($endTime->lessThan($startTime)) {
-                           $endTime =  $endTime->addDay();
+                            $endTime = $endTime->addDay();
                         }
                         $timing = $endTime->diffInMinutes($startTime);
+                        $hours = $endTime->diffInHours($startTime);
+                        $milli = $endTime->diffInSeconds($startTime) * 1000;
+                        $task->minutes = $timing;
+                        $task->milli = $milli;
+                        $task->remarks = $record->remarks;
                         $task->status = 'Completed in ' . $timing . " Minutes";
+                        $task->modEndTime = $endTime->format('D M d Y H:i:s O');
+                        $task->modStartTime = $startTime->format('D M d Y H:i:s O');
                     }
-
-                    if ($stat->startTime == "" and $stat->endTime == "") {
+                    if ($record->startTime == "" and $record->endTime == "") {
                         $task->status = 'Not Started';
                     }
+
                 } else {
                     $task->status = 'Not Started';
                 }
-            }
+                return $task;
+            });
+            return $service;
 
-            return $item;
         });
-        return $tasks;
+        return $flight->services;
     }
 
-    public function page()
+    public function page(Request $request)
     {
-        $service = Service::with('tasks')->paginate();
+        $service = Service::with('tasks')->where('carrierId', $request->carrier)->paginate();
         $service->map(function ($item) {
             $item['view'] = action('ServiceController@show', $item->id);
-            $item['edit'] = action('ServiceController@edit', $item->id);
+            $item['edit'] = action('ServiceController@edit', array('id'=>$item->id,'carrierId'=>$item->carrierId));
             $item['delete'] = action('ServiceController@destroy', $item->id);
+            $item['button'] = "View Tasks";
             return $item;
         });
         return $service;

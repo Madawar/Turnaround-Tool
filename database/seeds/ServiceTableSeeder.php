@@ -24,13 +24,14 @@ class ServiceTableSeeder extends Seeder
         foreach ($services as $service){
             \App\Service::create(array(
                 'service'=>$service,
-                'department'=>1
+                'department'=>1,
+                'carrierId'=>1
             ));
         }
 
         $tasks = array(
             array('serviceId'=>'1','task'=>'Position Passenger Steps','timed'=>1),
-            array('serviceId'=>'1','task'=>'Supply Power','requiresTimeOfAction'=>1),
+            array('serviceId'=>'1','task'=>'Supply Power','timed'=>0),
             array('serviceId'=>'1','task'=>'Unload AFT Lower Deck','timed'=>1),
             array('serviceId'=>'1','task'=>'Unload Main Deck','timed'=>1),
             array('serviceId'=>'1','task'=>'Service Lavatories','timed'=>1),
@@ -40,7 +41,7 @@ class ServiceTableSeeder extends Seeder
             array('serviceId'=>'1','task'=>'Unload FWD Lower Lobe','timed'=>1),
             array('serviceId'=>'1','task'=>'Load Main Deck Cargo','timed'=>1),
             array('serviceId'=>'1','task'=>'Load FWD Lower Lobe','timed'=>1),
-            array('serviceId'=>'1','task'=>'Power Supply Removal','requiresTimeOfAction'=>1),
+            array('serviceId'=>'1','task'=>'Power Supply Removal','timed'=>0),
             array('serviceId'=>'1','task'=>'Remove Steps','timed'=>1),
             array('serviceId'=>'1','task'=>'PushBack','timed'=>1),
         );

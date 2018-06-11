@@ -35,7 +35,7 @@
                     @vuetable:loading="showLoader"
                     @vuetable:loaded="hideLoader"
                     @vuetable:pagination-data="onPaginationData"
-                    detail-row-component="my-detail-row"
+                    :detail-row-component="detail_row"
                     @vuetable:cell-clicked="onCellClicked"
             ></vuetable>
             <div class="vuetable-pagination">
@@ -68,19 +68,22 @@
     import VueEvents from 'vue-events'
     import FilterBar from './FilterBar'
     import CustomActions from './CustomActions'
-    import DetailRow from '../DetailRow'
+    import DetailRow from '../details/DetailRow'
+    import TasksRow from '../details/TasksRow'
 
     Vue.use(VueEvents)
     Vue.component('filter-bar', FilterBar)
     Vue.component('custom-actions', CustomActions)
-    Vue.component('my-detail-row', DetailRow)
+    Vue.component('my_detail_row', DetailRow)
+    Vue.component('tasks_row', TasksRow)
+
     export default {
         components: {
             Vuetable,
             VuetablePagination,
             VuetablePaginationInfo
         },
-        props: ['columns', 'url', 'filters', 'threshold'],
+        props: ['columns', 'url', 'filters', 'threshold','detail_row'],
         mounted: function () {
 
         },

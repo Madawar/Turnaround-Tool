@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Flight;
-use App\Service;
-use App\TaskHistory;
 use Carbon\Carbon;
+use Helper;
 use Illuminate\Http\Request;
+use PDF;
+
 
 class FlightController extends Controller
 {
@@ -27,7 +28,7 @@ class FlightController extends Controller
      */
     public function create()
     {
-        //
+        return view('flights.create_flight');
     }
 
     /**
@@ -38,7 +39,8 @@ class FlightController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        Flight::create($request->all());
+        return redirect()->action('FlightControllerController@index');
     }
 
     /**
@@ -49,30 +51,33 @@ class FlightController extends Controller
      */
     public function show($id)
     {
-        $flight = Flight::find($id);
-        $time = $flight->arrival;
-        $flight->arrival = Carbon::createFromFormat('Y-m-d H:i:s', $flight->arrival)->format('D M d Y H:i:s O');
-        $flight->startTime = Carbon::createFromFormat('Y-m-d H:i:s', $time)->addMinute(5)->format('D M d Y H:i:s O');
+        $flight = Flight::with('services.tasks.records')->with('tasks')->find($id);
+        if ($flight->arrival) {
+            $time = $flight->arrival;
+            $flight->arr = Carbon::createFromFormat('Y-m-d H:i', $flight->arrival)->format('D M d Y H:i:s O');
+            $flight->startTime = Carbon::createFromFormat('Y-m-d H:i', $time)->addMinute(5)->format('D M d Y H:i:s O');
+        } else {
+            $time = $flight->STD;
+            $flight->arr = Carbon::createFromFormat('Y-m-d H:i', $flight->STD)->format('D M d Y H:i:s O');
+            $flight->startTime = Carbon::createFromFormat('Y-m-d H:i', $time)->addMinute(5)->format('D M d Y H:i:s O');
+        }
+        $flight->services->map(function ($service, $key) use ($flight) {
 
-        $services = Service::with('tasks')->get();
-        $flightId = $id;
-        $services->map(function ($item) use ($flightId) {
-            $item->rows = 0;
-            foreach ($item->tasks as $task) {
-                $stat = TaskHistory::where('serviceId', $task->serviceId)->where('taskId', $task->id)->where('flightId', $flightId)->first();
+            $service->tasks->map(function ($task, $key) use ($flight) {
+                $flight->rows = 0;
 
-                if (count($stat)) {
+                $record = $flight->tasks->where('taskId', $task->id)->first();
 
-                    $task->startTime = $stat->startTime;
-                    $task->endTime = $stat->endTime;
-                    if ($stat->startTime != "" and $stat->endTime == "") {
+                if ($record) {
+                    $task->startTime = $record->startTime;
+                    $task->endTime = $record->endTime;
+                    if ($record->startTime != "" and $record->endTime == "") {
                         $task->status = 'Ongoing';
                     }
 
-                    if ($stat->startTime != "" and $stat->endTime != "") {
-                        $item->rows = $item->rows + 1;
-                        $startTime = Carbon::createFromFormat('H:i:s', $stat->startTime);
-                        $endTime = Carbon::createFromFormat('H:i:s', $stat->endTime);
+                    if ($record->startTime != "" and $record->endTime != "") {
+                        $startTime = Carbon::createFromFormat('H:i:s', $record->startTime);
+                        $endTime = Carbon::createFromFormat('H:i:s', $record->endTime);
                         if ($endTime->lessThan($startTime)) {
                             $endTime = $endTime->addDay();
                         }
@@ -81,24 +86,29 @@ class FlightController extends Controller
                         $milli = $endTime->diffInSeconds($startTime) * 1000;
                         $task->minutes = $timing;
                         $task->milli = $milli;
-                        $task->remarks = $stat->remarks;
+                        $task->remarks = $record->remarks;
                         $task->status = 'Completed in ' . $timing . " Minutes";
                         $task->modEndTime = $endTime->format('D M d Y H:i:s O');
                         $task->modStartTime = $startTime->format('D M d Y H:i:s O');
                     }
-
-                    if ($stat->startTime == "" and $stat->endTime == "") {
+                    if ($record->startTime == "" and $record->endTime == "") {
                         $task->status = 'Not Started';
                     }
+
                 } else {
                     $task->status = 'Not Started';
                 }
-            }
+                return $task;
+            });
+            return $service;
 
-            return $item;
         });
-        return view('flights.view_flight')->with(compact('services', 'flight'));
+
+
+        return view('flights.view_flight')->with(compact('flight'));
     }
+
+
 
     /**
      * Show the form for editing the specified resource.
@@ -108,8 +118,16 @@ class FlightController extends Controller
      */
     public function edit($id)
     {
-        $flight = Flight::find($id);
-        return view('flights.create_flight')->with(compact('flight'));
+        $flight = Flight::with('cx')->find($id);
+        $carrier = $flight->carrier;
+        $flightDate = $flight->flightDate;
+        $completed = $flight->completed;
+        $arrival = $flight->arrival;
+        $departure = $flight->departure;
+        $STA = $flight->STA;
+        $STD = $flight->STD;
+
+        return view('flights.create_flight')->with(compact('flight', 'carrier', 'flightDate', 'arrival', 'departure', 'STA', 'STD', 'completed'));
     }
 
     /**
@@ -121,7 +139,9 @@ class FlightController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $flight = Flight::find($id);
+        $flight->update($request->all());
+        return redirect()->action('FlightController@index');
     }
 
     /**

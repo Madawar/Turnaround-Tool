@@ -15,6 +15,13 @@ Route::get('/pda', function () {
     return view('pda');
 });
 
+Route::get('/meeting', function () {
+    return view('meeting');
+});
+
 Route::resource('flight', 'FlightController');
+
 Route::resource('service', 'ServiceController');
+Route::resource('task', 'TaskController');
+Route::resource('carrier', 'CarrierController');
 

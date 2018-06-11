@@ -18,11 +18,9 @@ class CreateTasksTable extends Migration
             $table->string('task')->nullable();
             $table->integer('serviceId')->unsigned();
             $table->boolean('timed')->default(0)->nullable();
-            $table->boolean('requiresTimeOfAction')->default(0)->nullable();
             $table->string('timeFrom')->nullable();
             $table->string('linkedTo')->nullable();
             $table->integer('order')->nullable();
-            $table->time('milestone')->nullable();
             $table->timestamps();
         });
     }

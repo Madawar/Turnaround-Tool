@@ -22,7 +22,9 @@ class CreateFlightsTable extends Migration
             $table->dateTime('departure')->nullable();
             $table->dateTime('STA')->nullable();
             $table->dateTime('STD')->nullable();
-            $table->boolean('completed')->nullable();
+            $table->integer('delayCode')->nullable();
+            $table->string('delayCode')->nullable();
+            $table->boolean('loaded')->nullable();
             $table->timestamps();
         });
     }

@@ -15,9 +15,14 @@
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Flights</h3>
+                    <div class="card-options">
+
+                        <a  class="btn btn-secondary btn-sm" href="{{action('FlightController@create')}}"><i class="fa fa-plus"></i> Add Flight</a>
+
+                    </div>
                 </div>
 
-                <vtable url="{{action('Api\FlightController@page')}}" :filters="filters"
+                <vtable detail_row="my_detail_row" url="{{action('Api\FlightController@page')}}" :filters="filters"
                         :columns="columns"></vtable>
             </div>
 
@@ -53,21 +58,27 @@
                         visible: true
                     },
                     {
+                        name: 'status',
+                        title: 'Status',
+                        sortField: 'status',
+                        visible: true
+                    },
+                    {
                         name: 'arrival',
                         title: 'ATA',
                         sortField: 'arrival',
                         visible: true
-                    },{
+                    }, {
                         name: 'departure',
                         title: 'ATD',
                         sortField: 'departure',
                         visible: true
-                    },{
+                    }, {
                         name: 'STA',
                         title: 'STA',
                         sortField: 'STA',
                         visible: true
-                    },{
+                    }, {
                         name: 'STD',
                         title: 'STD',
                         sortField: 'STD',

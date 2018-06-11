@@ -19,11 +19,12 @@
                             <th>Service</th>
                             <th>Timed</th>
                             <th>Milestone</th>
+                            <th>Action</th>
 
                         </tr>
 
                             <tr>
-                                <td style="font-weight: bold; background: #f6fbff;" colspan="7">{{$service->service}}</td>
+                                <td style="font-weight: bold; background: #f6fbff;" colspan="5">{{$service->service}}</td>
                             </tr>
                             <?php $count = 0 ?>
                             @foreach($service->tasks as $task)
@@ -32,7 +33,10 @@
                                     <td>{{$task->task}}</td>
                                     <td>{{$task->timed}}</td>
                                     <td>{{$task->milestone}}</td>
-                                    <td></td>
+                                    <td>
+                                        <a href="{{action('TaskController@edit',array('id'=>$task->id,'serviceId'=>$service->id))}}" class="btn btn-secondary btn-sm">Edit</a>
+                                        <a href="{{action('TaskController@destroy',array('id'=>$task->id))}}" class="btn btn-danger btn-sm">Delete</a>
+                                    </td>
                                 </tr>
                             @endforeach
 
@@ -41,7 +45,7 @@
 
 
                 <div class="card-footer text-right">
-                    <button class="btn btn-primary btn-block">Add Item</button>
+                    <a href="{{action('TaskController@create',array('serviceId'=>$service->id))}}" class="btn btn-primary btn-block">Add Item</a>
                 </div>
             </div>
         </div>

@@ -17,14 +17,14 @@
     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico"/>
     <!-- Generated: 2018-03-21 10:23:11 +0100 -->
     <title>@yield('title')</title>
-
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
     <link rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,300i,400,400i,500,500i,600,600i,700,700i&amp;subset=latin-ext">
 
     <!-- Dashboard Core -->
     <link rel="stylesheet" href="{{url('css/bundle.css')}}" type="text/css" media="all"/>
     <link rel="stylesheet" href="{{url('css/dashboard.css')}}" type="text/css" media="all"/>
+    <link rel="stylesheet" href="{{url('css/picker.css')}}" type="text/css" media="all"/>
+
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="//rubaxa.github.io/Sortable/Sortable.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">

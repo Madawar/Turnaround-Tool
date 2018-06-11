@@ -18,6 +18,37 @@
                 </div>
                 <div id="chart_div"></div>
                 <div id='png'></div>
+                <hr/>
+                <h1 class="text-center">{{$flight->cx->carrier}} {{$flight->flightNo}}</h1>
+                <h2 class="text-center">{{$flight->flightDate}}</h2>
+                <h5 class="text-center">
+                    <div v-if="download == 0"><i class="fa fa-spinner fa-spin"></i> Generating Report</div>
+                    <div :href="url" v-if="download == 1"><a :href="url"><i class="fa fa-download"></i> Download Report</a></div>
+                </h5>
+                <hr/>
+                <table class="table card-table table-vcenter text-nowrap ">
+                    <tr>
+
+                        <td>
+                            <div class="info">
+                                Scheduled Time of Arrival : <b>{{$flight->STA}}</b> <br/>
+                                Scheduled Time of Departure : <b>{{$flight->STD}}</b>
+                            </div>
+                        </td>
+                        <td class="text-align:right;">
+                            Actual Time of Arrival : <b>{{$flight->arrival}}</b> <br/>
+                            Actual Time of Departure : <b>{{$flight->departure}}</b>
+                        </td>
+                        <td>
+                            <div class="info">
+                                Delay Code : <b></b> <br/>
+                                Turnaround Time : <b></b>
+                            </div>
+                        </td>
+
+                    </tr>
+                </table>
+                <hr/>
                 <table class="table card-table table-vcenter text-nowrap">
                     <tr>
                         <th>#</th>
@@ -28,23 +59,26 @@
                         <th>Time Taken (Mins)</th>
                         <th>Milestone Reached</th>
                     </tr>
-                    @foreach($services as $service)
-                        <tr>
-                            <td style="font-weight: bold; background: #f6fbff;" colspan="8">{{$service->service}}</td>
-                        </tr>
-                        <?php $count = 0 ?>
-                        @foreach($service->tasks as $task)
+                    @foreach($flight->services as $service)
+                        @if(count($service->tasks) >0)
                             <tr>
-                                <td>{{$count = $count + 1}}</td>
-                                <td>{{$task->task}}</td>
-                                <td>{{$task->startTime}}</td>
-                                <td>{{$task->endTime}}</td>
-                                <td>{{$task->remarks}}</td>
-                                <td>{{$task->minutes}} </td>
-                                <td> </td>
-                                <td></td>
+                                <td style="font-weight: bold; background: #f6fbff;"
+                                    colspan="8">{{$service->service}}</td>
                             </tr>
-                        @endforeach
+                            <?php $count = 0 ?>
+                            @foreach($service->tasks as $task)
+                                <tr>
+                                    <td>{{$count = $count + 1}}</td>
+                                    <td>{{$task->task}}</td>
+                                    <td>{{$task->startTime}}</td>
+                                    <td>{{$task->endTime}}</td>
+                                    <td>{{$task->remarks}}</td>
+                                    <td>{{$task->minutes}} </td>
+                                    <td></td>
+
+                                </tr>
+                            @endforeach
+                        @endif
                     @endforeach
 
                 </table>
@@ -61,7 +95,7 @@
 
         app = new Vue({
             el: '#app',
-            mounted(){
+            mounted() {
                 google.charts.load('current', {'packages': ['gantt']});
                 google.charts.setOnLoadCallback(drawChart);
 
@@ -83,12 +117,12 @@
 
                     otherData.addRows([
                             <?php $rows = 1 ?>
-                        ['ATA', 'Flight Arrival {{$flight->flightNo}}','Flight Arrival {{$flight->flightNo}}', new Date('{{$flight->arrival}}'), new Date('{{$flight->startTime}}'), null, 100, null],
-                            @foreach($services as $service)
+                        ['ATA', 'Flight Arrival {{$flight->flightNo}}', 'Flight Arrival {{$flight->flightNo}}', new Date('{{$flight->arr}}'), new Date('{{$flight->startTime}}'), null, 100, null],
+                            @foreach($flight->services as $service)
                             @foreach($service->tasks as $task)
                             @if($task->modStartTime !="")
-                            <?php $rows = $rows +1?>
-                        ['{{$task->id}}', '{{$task->task}}','{{$task->task}}', new Date('{{$task->modStartTime}}'), new Date('{{$task->modEndTime}}'), null, 100, 'ATA'],
+                            <?php $rows = $rows + 1?>
+                        ['{{$task->id}}', '{{$task->task}}', '{{$task->task}}', new Date('{{$task->modStartTime}}'), new Date('{{$task->modEndTime}}'), null, 100, 'ATA'],
                         @endif
                         @endforeach
                         @endforeach
@@ -106,8 +140,21 @@
                     chart.draw(otherData, options);
                     document.getElementById('png').outerHTML = '<a href="' + chart.getImageURI() + '">Printable version</a>';
                 }
+
+                var vm = this;
+                axios.get("/api/flt/report/{{$flight->id}}")
+                    .then(function (response) {
+                        vm.download = 1;
+                        vm.url = response.data.file;
+                    })
+                    .catch(function (error) {
+                        console.log(error);
+                    });
             },
-            data: {}
+            data: {
+                download: 0,
+                url: ''
+            }
         });
 
 

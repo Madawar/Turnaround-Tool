@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Carrier;
+use App\Flight;
+use App\Observers\CarrierObserver;
+use App\Observers\ServiceObserver;
+use App\Observers\FlightObserver;
+use App\Service;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -13,7 +19,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Carrier::observe(CarrierObserver::class);
+        Service::observe(ServiceObserver::class);
+        Flight::observe(FlightObserver::class);
     }
 
     /**

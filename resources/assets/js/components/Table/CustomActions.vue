@@ -1,6 +1,6 @@
 <template>
     <div class="custom-actions">
-        <a :href="rowData.view" class="btn btn-secondary btn-sm">Report</a>
+        <a :href="rowData.view" class="btn btn-secondary btn-sm">{{rowData.button}}</a>
 
         <a class="icon" :href="rowData.edit">
             <i class="fe fe-edit"></i>

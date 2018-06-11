@@ -1,27 +1,24 @@
 @extends('layouts.master')
 
 @section('title')
-    {!!env('COMPANY_NAME')!!}| View Services
+    {!!env('COMPANY_NAME')!!}| View Carrier
 @endsection
-
 
 
 
 @section('content')
     <div id="app">
         <div class="container">
-
-
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Services</h3>
-            </div>
-
-                <vtable url="{{action('Api\ServiceController@page')}}" :filters="filters"
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">View Services</h3>
+                </div>
+                <vtable detail_row="tasks_row" url="{{action('Api\ServiceController@page',array('carrier'=>$carrier->id))}}" :filters="filters"
                         :columns="columns"></vtable>
-
-
-        </div>
+                <div class="card-footer text-right">
+                    <a href="{{action('ServiceController@create',array('carrierId'=>$carrier->id))}}" class="btn btn-primary btn-block">Add Service</a>
+                </div>
+            </div>
         </div>
     </div>
 @endsection

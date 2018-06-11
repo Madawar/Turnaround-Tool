@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Carrier;
 use App\Flight;
 use App\Http\Controllers\Controller;
 use Carbon\Carbon;
+use DB;
+use Helper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class FlightController extends Controller
 {
@@ -16,7 +20,7 @@ class FlightController extends Controller
      */
     public function index()
     {
-        $flights = Flight::with('cx')->get();
+        $flights = Flight::with('services.tasks.records')->with('tasks')->get();
         $flights->map(function ($item) {
             $varDate = Carbon::createFromFormat('Y-m-d', $item->flightDate);
             $item->flightDate = $varDate->format('jS-M-y');
@@ -33,10 +37,33 @@ class FlightController extends Controller
         return $flights;
     }
 
+    public function flightList()
+    {
+        return Carrier::select(DB::raw('carrier as name'), 'id')->get();
+    }
+
     public function page()
     {
         $flight = Flight::with('cx', 'tasks.task')->paginate();
         $flight->map(function ($item) {
+            $item->button = 'View Report';
+            $varDate = Carbon::createFromFormat('Y-m-d', $item->flightDate);
+            $item->flightDate = $varDate->format('jS-M-y');
+            $item->flt = $item->cx->carrier . '-' . $item->flightNo;
+            if ($varDate->isToday()) {
+                $item->narration = 'Today';
+            } elseif ($varDate->isTomorrow()) {
+                $item->narration = 'Tomorrow';
+            } elseif ($varDate->isYesterday()) {
+                $item->narration = 'Yesterday';
+            }
+
+            if ($item->completed == 0) {
+                $item->status = '<span class="status-icon bg-danger"></span> Incomplete';
+            } else {
+                $item->status = '<span class="status-icon bg-success"></span> Completed';
+            }
+
             $item->tasks->map(function ($task) {
                 $task->taskName = $task->task->task;
                 if ($task->startTime != "" and $task->endTime == "") {
@@ -70,6 +97,13 @@ class FlightController extends Controller
             return $item;
         });
         return $flight;
+    }
+
+    public function report($id)
+    {
+        $flight = Flight::with('services.tasks.records')->with('tasks')->find($id);
+        $name = Helper::createReport($flight);
+        return array('file' =>Storage::url($name));
     }
 
     /**

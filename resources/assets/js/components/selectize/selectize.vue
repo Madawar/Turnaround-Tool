@@ -1,13 +1,21 @@
 <template>
     <select id="selectInput" class="options" v-bind:placeholder="placeholder"></select>
 </template>
-
+<style>
+    .selectize-control{
+        width: 90% !important;
+    }
+</style>
 <script>
     export default {
         props: {
             'value': {
 
                 default: 0
+            },
+            'include':{
+              type:Boolean,
+              default: false
             },
             'url': {
                 type: String,
@@ -44,18 +52,31 @@
                 options: this.options,
                 render: {
                     item: function (item, escape) {
-                        return '<div>' +
-                            (item.name ? '<span class="name">' + escape(item.name) + '</span>' : '') +
-                            (item.id ? '<span class="email">' + escape(item.id) + '</span>' : '') +
-                            '</div>';
+                        if(this.include == true){
+                            return '<div>' +
+                                (item.name ? '<span class="name">' + escape(item.name) + '</span>' : '') +
+                                (item.id ? '<span class="email">' + escape(item.id) + '</span>' : '') +
+                                '</div>';
+                        }else{
+                            return '<div>' +
+                                (item.name ? '<span class="name">' + escape(item.name) + '</span>' : '') + '</div>';
+                        }
+
                     },
                     option: function (item, escape) {
                         var label = item.name || item.name;
                         var caption = item.name ? item.name : null;
-                        return '<div>' +
-                            '<span class="label">' + escape(label) + '</span><br/>' +
-                            (caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
-                            '</div>';
+                        if(this.include == true){
+                            return '<div>' +
+                                '<span class="label">' + escape(label) + '</span><br/>' +
+                                (caption ? '<span class="caption">' + escape(caption) + '</span>' : '') +
+                                '</div>';
+                        }else{
+                            return '<div>' +
+                                '<span class="label">' + escape(label) + '</span>'+
+                                '</div>';
+                        }
+
                     }
                 },
                 onChange: function (value) {
@@ -107,20 +128,23 @@
                 }
             },
             options: function () {
+                console.log('options changed');
                 var selectize = this.selector[0].selectize;
                 selectize.clearOptions();
                 selectize.addOption(this.options);
                 if (this.refresh == true && this.value == 0) {
                     selectize.refreshOptions();
                 }
+
                 if (this.value > 0) {
                     console.log(this.value);
                     selectize.setValue(this.value);
                     selectize.enable();
                 }
+
             },
             opts: function () {
-                this.options = this.opts;
+               // this.options = this.opts;
             }
         }
     }

@@ -16,11 +16,15 @@ mix.js('resources/assets/js/app.js', 'public/js');
 //.sass('resources/assets/plugins/**/plugin.scss', 'public/css');
 
 mix.styles(
-    'node_modules/phonon/dist/css/phonon.css', 'public/css/pda.css'
+    ['node_modules/phonon/dist/css/phonon.css'], 'public/css/pda.css'
+);
+mix.styles(
+    ['resources/assets/plugins/bootstrap-datepicker3.css','resources/assets/plugins/fontawesome-all.min.css'], 'public/css/picker.css'
 );
 mix.scripts([
     'resources/assets/vendors/jquery-3.2.1.min.js',
-    'resources/assets/vendors/selectize.min.js'
+    'resources/assets/vendors/selectize.min.js',
+    'resources/assets/plugins/bootstrap-datepicker.js'
 ], 'public/js/plugins.js');
 
 
