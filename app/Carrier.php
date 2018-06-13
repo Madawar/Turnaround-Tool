@@ -16,6 +16,11 @@ class Carrier extends Model
         return $this->hasMany('App\Service', 'carrierId', 'id');
     }
 
+    public function flights()
+    {
+        return $this->hasMany('App\Flight', 'carrier', 'id');
+    }
+
     protected $appends = array('freighterTurnaroundTime', 'passengerTurnaroundTime', 'button');
 
     public function getFreighterTurnaroundTimeAttribute($value)

@@ -28,11 +28,11 @@ class Helper
 
     public function createReport($flight)
     {
-        $name = str_slug($flight->cx->carrier .' '. $flight->flightNo .' '. $flight->flightDate);
+        $name = str_slug($flight->cx->carrier . ' ' . $flight->flightNo . ' ' . $flight->flightDate);
         $pdf = PDF::setOptions(['dpi' => 150, 'defaultPaperSize' => 'a4'])
             ->loadView('report.flight_report', compact('flight'));
         $pdf->save(storage_path("app/public/{$name}.pdf"));
-        return $name.'.pdf';
+        return $name . '.pdf';
     }
 
     public function FormatTime($time)
@@ -72,6 +72,23 @@ class Helper
         }
         return null;
 
+    }
+
+    public function parseDate($datetime, $currentFormat, $toFormat)
+    {
+
+        if ($datetime) {
+            return Carbon::createFromFormat($currentFormat, $datetime)->format($toFormat);
+        }
+    }
+
+    public function returnCarbon($datetime, $currentFormat, $toFormat)
+    {
+
+        if ($datetime) {
+            return Carbon::createFromFormat($currentFormat, $datetime);
+        }
+        return null;
     }
 
     public function formatTimeForUser($date)

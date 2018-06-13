@@ -76,8 +76,9 @@ class FlightController extends Controller
                     }
 
                     if ($record->startTime != "" and $record->endTime != "") {
-                        $startTime = Carbon::createFromFormat('H:i:s', $record->startTime);
-                        $endTime = Carbon::createFromFormat('H:i:s', $record->endTime);
+                        $flightDate = $flight->flightDate;
+                        $startTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate.' '. $record->startTime);
+                        $endTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate.' '.$record->endTime);
                         if ($endTime->lessThan($startTime)) {
                             $endTime = $endTime->addDay();
                         }

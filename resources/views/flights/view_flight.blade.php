@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {!!env('COMPANY_NAME')!!}| View Flight
+    {!!env('COMPANY_NAME')!!}.View Flight
 @endsection
 
 
@@ -19,11 +19,13 @@
                 <div id="chart_div"></div>
                 <div id='png'></div>
                 <hr/>
-                <h1 class="text-center">{{$flight->cx->carrier}} {{$flight->flightNo}}</h1>
+                <h1 class="text-center">{{$flight->cx->carrier}} {{$flight->flightNo}} Turnaround Report</h1>
                 <h2 class="text-center">{{$flight->flightDate}}</h2>
                 <h5 class="text-center">
                     <div v-if="download == 0"><i class="fa fa-spinner fa-spin"></i> Generating Report</div>
-                    <div :href="url" v-if="download == 1"><a :href="url"><i class="fa fa-download"></i> Download Report</a></div>
+                    <div v-if="download === 1">
+                    <a :href="url"  ><a :href="url"><i class="fa fa-download"></i> Download Report</a></a>
+                    </div>
                 </h5>
                 <hr/>
                 <table class="table card-table table-vcenter text-nowrap ">
@@ -129,7 +131,7 @@
                     ]);
 
                     var options = {
-                        height: {{$rows * 65}},
+                        height: {{$rows * 45}},
                         gantt: {
                             defaultStartDateMillis: new Date(2015, 3, 28)
                         }

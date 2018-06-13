@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {!!env('COMPANY_NAME')!!}| View Service
+    {!!env('COMPANY_NAME')!!}.View Service
 @endsection
 
 

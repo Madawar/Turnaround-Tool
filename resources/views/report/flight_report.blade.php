@@ -24,7 +24,7 @@
 </head>
 <body>
 
-<h1 class="text-center">{{$flight->cx->carrier}} {{$flight->flightNo}}</h1>
+<h1 class="text-center">{{$flight->cx->carrier}} {{$flight->flightNo}} Turnaround Report</h1>
 <h2 class="text-center">{{$flight->flightDate}}</h2>
 <hr/>
 <table class="table card-table table-vcenter text-nowrap ">

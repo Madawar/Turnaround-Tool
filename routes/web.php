@@ -24,4 +24,6 @@ Route::resource('flight', 'FlightController');
 Route::resource('service', 'ServiceController');
 Route::resource('task', 'TaskController');
 Route::resource('carrier', 'CarrierController');
+Route::get('report', 'ReportController@index');
+Route::post('report', 'ReportController@generateReport');
 

@@ -13,7 +13,7 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="HandheldFriendly" content="True">
     <meta name="MobileOptimized" content="320">
-    <link rel="icon" href="./favicon.ico" type="image/x-icon"/>
+    <link rel="icon" href="{{url('favicon.ico')}}" type="image/x-icon"/>
     <link rel="shortcut icon" type="image/x-icon" href="./favicon.ico"/>
     <!-- Generated: 2018-03-21 10:23:11 +0100 -->
     <title>@yield('title')</title>

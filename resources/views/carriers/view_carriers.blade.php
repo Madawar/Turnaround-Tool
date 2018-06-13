@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {!!env('COMPANY_NAME')!!}| View Carrier
+    {!!env('COMPANY_NAME')!!}.View Carrier
 @endsection
 
 

@@ -24,7 +24,7 @@
 </head>
 <body>
 
-@include("report.carrier_report_slug")
+@include("report.finance_report_slug")
 </body>
 </html>
 

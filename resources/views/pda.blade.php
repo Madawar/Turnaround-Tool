@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{{url('css/pda.css')}}" type="text/css" media="all"/>
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height" />
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <link rel="icon" href="{{url('favicon.ico')}}" type="image/x-icon"/>
     <title>Hand Held</title>
 </head>
 <body>

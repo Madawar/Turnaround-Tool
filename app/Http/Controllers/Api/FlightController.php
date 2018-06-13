@@ -44,7 +44,7 @@ class FlightController extends Controller
 
     public function page()
     {
-        $flight = Flight::with('cx', 'tasks.task')->paginate();
+        $flight = Flight::with('cx', 'tasks.task')->orderBy('flightDate')->paginate();
         $flight->map(function ($item) {
             $item->button = 'View Report';
             $varDate = Carbon::createFromFormat('Y-m-d', $item->flightDate);
@@ -102,6 +102,58 @@ class FlightController extends Controller
     public function report($id)
     {
         $flight = Flight::with('services.tasks.records')->with('tasks')->find($id);
+        if ($flight->arrival) {
+            $time = $flight->arrival;
+            $flight->arr = Carbon::createFromFormat('Y-m-d H:i', $flight->arrival)->format('D M d Y H:i:s O');
+            $flight->startTime = Carbon::createFromFormat('Y-m-d H:i', $time)->addMinute(5)->format('D M d Y H:i:s O');
+        } else {
+            $time = $flight->STD;
+            $flight->arr = Carbon::createFromFormat('Y-m-d H:i', $flight->STD)->format('D M d Y H:i:s O');
+            $flight->startTime = Carbon::createFromFormat('Y-m-d H:i', $time)->addMinute(5)->format('D M d Y H:i:s O');
+        }
+        $flight->services->map(function ($service, $key) use ($flight) {
+
+            $service->tasks->map(function ($task, $key) use ($flight) {
+                $flight->rows = 0;
+
+                $record = $flight->tasks->where('taskId', $task->id)->first();
+
+                if ($record) {
+                    $task->startTime = $record->startTime;
+                    $task->endTime = $record->endTime;
+                    if ($record->startTime != "" and $record->endTime == "") {
+                        $task->status = 'Ongoing';
+                    }
+
+                    if ($record->startTime != "" and $record->endTime != "") {
+                        $flightDate = $flight->flightDate;
+                        $startTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate.' '. $record->startTime);
+                        $endTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate.' '.$record->endTime);
+                        if ($endTime->lessThan($startTime)) {
+                            $endTime = $endTime->addDay();
+                        }
+                        $timing = $endTime->diffInMinutes($startTime);
+                        $hours = $endTime->diffInHours($startTime);
+                        $milli = $endTime->diffInSeconds($startTime) * 1000;
+                        $task->minutes = $timing;
+                        $task->milli = $milli;
+                        $task->remarks = $record->remarks;
+                        $task->status = 'Completed in ' . $timing . " Minutes";
+                        $task->modEndTime = $endTime->format('D M d Y H:i:s O');
+                        $task->modStartTime = $startTime->format('D M d Y H:i:s O');
+                    }
+                    if ($record->startTime == "" and $record->endTime == "") {
+                        $task->status = 'Not Started';
+                    }
+
+                } else {
+                    $task->status = 'Not Started';
+                }
+                return $task;
+            });
+            return $service;
+
+        });
         $name = Helper::createReport($flight);
         return array('file' =>Storage::url($name));
     }

@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('title')
-    {!!env('COMPANY_NAME')!!}  Create Flight
+    {!!env('COMPANY_NAME')!!}.Create Flight
 @endsection
 
 
