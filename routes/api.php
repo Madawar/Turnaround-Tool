@@ -25,3 +25,4 @@ Route::get('/flt/page', 'Api\FlightController@page');
 Route::get('/service/page', 'Api\ServiceController@page');
 Route::resource('/service', 'Api\ServiceController');
 Route::resource('/task', 'Api\TaskController');
+Route::resource('/delay', 'Api\DelayCodeController');

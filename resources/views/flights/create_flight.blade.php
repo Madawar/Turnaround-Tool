@@ -151,7 +151,7 @@
         </span>
                                         <sl id="delayCode" placeholder="Delay COde" name="delayCode"
                                             v-model="delayCode"
-                                            :opts="opt"></sl>
+                                            url="{{action('Api\DelayCodeController@index')}}"></sl>
                                         {!! $errors->first('delayCode', '<p class="invalid-feedback">:message</p>') !!}
                                     </div>
                                 </div>
@@ -169,6 +169,18 @@
                             </span>
                                     {!! Form::text('loaded', null, ['class' => $errors->has('loaded') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Aircraft Loaded By']) !!}
                                     {!! $errors->first('loaded', '<p class="invalid-feedback">:message</p>') !!}
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {!! Form::label('remarks','Remarks') !!}
+                                <div class="input-group">
+                            		<span class="input-group-prepend" id="remarks">
+                            			<span class="input-group-text"><i class="fa fa-comment"></i></span>
+                                    </span>
+                                    {!! Form::text('remarks', null, ['class' => $errors->has('remarks') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Flight Remarks']) !!}
+                                    {!! $errors->first('remarks', '<p class="invalid-feedback">:message</p>') !!}
                                 </div>
                             </div>
                         </div>

@@ -6,15 +6,7 @@
                   @include('layouts.sidebar.products')
                 </ul>
             </div>
-            <div class="col-3 ml-auto">
-                <form class="input-icon">
-                    <input type="search" class="form-control header-search" placeholder="Search&hellip;"
-                           tabindex="1">
-                    <div class="input-icon-addon">
-                        <i class="fe fe-search"></i>
-                    </div>
-                </form>
-            </div>
+
         </div>
     </div>
 </div>

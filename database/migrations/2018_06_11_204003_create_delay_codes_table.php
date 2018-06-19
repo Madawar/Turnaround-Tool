@@ -15,6 +15,9 @@ class CreateDelayCodesTable extends Migration
     {
         Schema::create('delay_codes', function (Blueprint $table) {
             $table->increments('id');
+            $table->double('delayNumber')->nullable();
+            $table->string('delayAbbreviation')->nullable();
+            $table->text('delayDescription')->nullable();
             $table->timestamps();
         });
     }

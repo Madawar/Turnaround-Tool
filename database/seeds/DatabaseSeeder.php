@@ -17,5 +17,6 @@ class DatabaseSeeder extends Seeder
          $this->call(ServiceTableSeeder::class);
          $this->call(FlightTableSeeder::class);
          $this->call(FullFlightSeeder::class);
+         $this->call(DelayCodeSeeder::class);
     }
 }

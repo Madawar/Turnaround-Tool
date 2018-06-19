@@ -1,14 +1,14 @@
 
 <li class="nav-item">
-    <a href="{{action('FlightController@index')}}" class="nav-link {{Helper::isCurrent('flight')}}"><i class="fe fe-box"></i> Flights</a>
+    <a href="{{action('FlightController@index')}}" class="nav-link {{Helper::isCurrent('flight')}}"><i class="fe fe-list"></i> Flights</a>
 </li>
 
 <li class="nav-item">
-    <a href="{{action('CarrierController@index')}}" class="nav-link {{Helper::isCurrent('carrier')}}"><i class="fal fa-helicopter"></i> Carrier</a>
+    <a href="{{action('CarrierController@index')}}" class="nav-link {{Helper::isCurrent('carrier')}}"><i class="fe fe-send"></i> Carrier</a>
 </li>
 
 <li class="nav-item">
-    <a href="{{action('ReportController@index')}}" class="nav-link {{Helper::isCurrent('report')}}"><i class="fal fa-file"></i> Reports</a>
+    <a href="{{action('ReportController@index')}}" class="nav-link {{Helper::isCurrent('report')}}"><i class="fe fe-file-text"></i> Reports</a>
 </li>
 
 
