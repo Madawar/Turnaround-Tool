@@ -42,9 +42,17 @@ class FlightController extends Controller
         return Carrier::select(DB::raw('carrier as name'), 'id')->get();
     }
 
-    public function page()
+    public function page(Request $request)
     {
-        $flight = Flight::with('cx', 'tasks.task')->orderBy('flightDate')->paginate();
+        $flight = Flight::with('cx', 'tasks.task')->orderBy('flightDate');
+
+        if ($request->filter) {
+
+            $flight = $flight->where('flightNo', 'like', '%' . $request->filter . '%')
+                ->orWhere('delayCode', 'like', '%' . $request->filter . '%')
+                ->orWhere('arrival', 'like', '%' . $request->filter . '%');
+        }
+        $flight = $flight->paginate();
         $flight->map(function ($item) {
             $item->button = 'View Report';
             $varDate = Carbon::createFromFormat('Y-m-d', $item->flightDate);
@@ -127,8 +135,8 @@ class FlightController extends Controller
 
                     if ($record->startTime != "" and $record->endTime != "") {
                         $flightDate = $flight->flightDate;
-                        $startTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate.' '. $record->startTime);
-                        $endTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate.' '.$record->endTime);
+                        $startTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate . ' ' . $record->startTime);
+                        $endTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate . ' ' . $record->endTime);
                         if ($endTime->lessThan($startTime)) {
                             $endTime = $endTime->addDay();
                         }
@@ -155,7 +163,7 @@ class FlightController extends Controller
 
         });
         $name = Helper::createReport($flight);
-        return array('file' =>Storage::url($name));
+        return array('file' => Storage::url($name));
     }
 
     /**
