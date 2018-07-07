@@ -14,6 +14,7 @@ class CarrierController extends Controller
      */
     public function index()
     {
+
         return view('carriers.view_carriers');
     }
 

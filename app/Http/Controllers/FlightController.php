@@ -18,6 +18,13 @@ class FlightController extends Controller
      */
     public function index()
     {
+       $flight = Flight::find(1);
+        $pdf = PDF::setOptions(['dpi' => 150, 'defaultPaperSize' => 'a4','isRemoteEnabled' => true])
+            ->loadView('report.charge_sheet',compact('flight'));
+        $pdf->setOptions(['isRemoteEnabled'=> TRUE,'dpi'=> 150,'defaultPaperSize' => 'a4']);
+
+        $pdf->save(storage_path("app/public/charge.pdf"));
+
         return view('flights.view_flights');
     }
 
