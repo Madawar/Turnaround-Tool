@@ -23,8 +23,11 @@
                 <h2 class="text-center">{{$flight->flightDate}}</h2>
                 <h5 class="text-center">
                     <div v-if="download == 0"><i class="fa fa-spinner fa-spin"></i> Generating Report</div>
+                    <div v-if="download == 2" class="text-danger"> Error Generating Report</div>
                     <div v-if="download === 1">
-                    <a :href="url"  ><a :href="url"><i class="fa fa-download"></i> Download Report</a></a>
+                        <div v-for="(item,index) in url">
+                        <a :href="item"  ><a :href="item"><i class="fa fa-download"></i> <span v-if="index == 0"> Download Flight Work Sheet </span><span v-if="index == 1"> Download Flight Charge Sheet </span></a></a>
+                        </div>
                     </div>
                 </h5>
                 <hr/>
@@ -150,12 +153,13 @@
                         vm.url = response.data.file;
                     })
                     .catch(function (error) {
+                        vm.download = 2;
                         console.log(error);
                     });
             },
             data: {
                 download: 0,
-                url: ''
+                url: []
             }
         });
 

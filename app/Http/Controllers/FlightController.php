@@ -7,7 +7,7 @@ use Carbon\Carbon;
 use Helper;
 use Illuminate\Http\Request;
 use PDF;
-
+use DB;
 
 class FlightController extends Controller
 {
@@ -18,12 +18,6 @@ class FlightController extends Controller
      */
     public function index()
     {
-       $flight = Flight::find(1);
-        $pdf = PDF::setOptions(['dpi' => 150, 'defaultPaperSize' => 'a4','isRemoteEnabled' => true])
-            ->loadView('report.charge_sheet',compact('flight'));
-        $pdf->setOptions(['isRemoteEnabled'=> TRUE,'dpi'=> 150,'defaultPaperSize' => 'a4']);
-
-        $pdf->save(storage_path("app/public/charge.pdf"));
 
         return view('flights.view_flights');
     }
@@ -47,7 +41,7 @@ class FlightController extends Controller
     public function store(Request $request)
     {
         Flight::create($request->all());
-        return redirect()->action('FlightControllerController@index');
+        return redirect()->action('FlightController@index');
     }
 
     /**
@@ -84,8 +78,8 @@ class FlightController extends Controller
 
                     if ($record->startTime != "" and $record->endTime != "") {
                         $flightDate = $flight->flightDate;
-                        $startTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate.' '. $record->startTime);
-                        $endTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate.' '.$record->endTime);
+                        $startTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate . ' ' . $record->startTime);
+                        $endTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate . ' ' . $record->endTime);
                         if ($endTime->lessThan($startTime)) {
                             $endTime = $endTime->addDay();
                         }
@@ -117,7 +111,6 @@ class FlightController extends Controller
     }
 
 
-
     /**
      * Show the form for editing the specified resource.
      *
@@ -134,8 +127,11 @@ class FlightController extends Controller
         $departure = $flight->departure;
         $STA = $flight->STA;
         $STD = $flight->STD;
+        $delayCode= $flight->delayCode;
+        $flightType = $flight->flightType;
+        $turnaroundType = $flight->turnaroundType;
 
-        return view('flights.create_flight')->with(compact('flight', 'carrier', 'flightDate', 'arrival', 'departure', 'STA', 'STD', 'completed'));
+        return view('flights.create_flight')->with(compact('flightType','delayCode','turnaroundType','flight', 'carrier', 'flightDate', 'arrival', 'departure', 'STA', 'STD', 'completed'));
     }
 
     /**
@@ -161,5 +157,16 @@ class FlightController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function flightDocuments($id,$type)
+    {
+        if($type == 'Charge_Sheet'){
+            $flight = Flight::find($id);
+
+        }else{
+
+        }
+
     }
 }

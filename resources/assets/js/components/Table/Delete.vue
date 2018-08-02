@@ -32,17 +32,19 @@
             }
         },
         methods: {
-            cancelDelete(){
+            cancelDelete() {
                 this.$events.fire('delete-hide')
             },
-            deleteItem(){
+            deleteItem() {
                 this.error = false;
-                this.$http.delete(this.delete_url).then(response => {
-                    this.$events.fire('delete-finished')
-                }, response => {
-                    this.error = true;
-                });
-
+                var vm = this;
+                axios.delete(this.delete_url)
+                    .then(function (response) {
+                        vm.$events.fire('delete-finished')
+                    })
+                    .catch(function (error) {
+                        vm.error = true;
+                    });
             }
         }
     }

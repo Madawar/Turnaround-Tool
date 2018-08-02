@@ -64,8 +64,8 @@ class ServiceController extends Controller
         $service = Service::with('tasks')->where('carrierId', $request->carrier)->paginate();
         $service->map(function ($item) {
             $item['view'] = action('ServiceController@show', $item->id);
-            $item['edit'] = action('ServiceController@edit', array('id'=>$item->id,'carrierId'=>$item->carrierId));
-            $item['delete'] = action('ServiceController@destroy', $item->id);
+            $item['edit'] = action('ServiceController@edit', array('id' => $item->id, 'carrierId' => $item->carrierId));
+            $item['delete'] = action('Api\ServiceController@destroy', $item->id);
             $item['button'] = "View Tasks";
             return $item;
         });
@@ -135,6 +135,7 @@ class ServiceController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Service::destroy($id);
+        array('ok' => 'ok');
     }
 }

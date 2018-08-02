@@ -22,21 +22,21 @@
 </head>
 <body>
 
-<img width="200px" src="{{url('/storage/logo.jpg')}}">
+<img width="200px" src="{{url('/logo.jpg')}}">
 
 
 <h1 class="text-center">Aircraft Turnaround Charge Sheet</h1>
-<h2 class="text-center">Date : {{\Carbon\Carbon::today()->format('dFY')}}</h2>
+<h2 class="text-center ">Date : <span class="">{{\Carbon\Carbon::today()->format('dFY')}}</span></h2>
 <hr/>
 <table class="table card-table table-vcenter text-nowrap table-bordered">
 
     <tbody>
     <tr>
-        <td colspan="4" style="font-weight: bold; background: #f6fbff;">Flight Details</td>
+        <td colspan="4" style="font-weight: bold; background: #f6fbff;">Flight Details {{url('/logo.jpg')}}</td>
     </tr>
     <tr>
         <td>
-            Flight Number : <u><b>{{$flight->cx->carrier}} {{$flight->flightNo}}</b></u>
+            Flight Number : <u><b class="">{{$flight->cx->carrier}} {{$flight->flightNo}}</b></u>
 
         </td>
         <td>
@@ -52,7 +52,7 @@
     </tr>
     <tr>
         <td>
-            Aircraft Type / Config : <u><b>{{$flight->aircraftType}}</b></u>
+            Aircraft Type / Config : <u><b class="">{{$flight->aircraftType}}</b></u>
 
         </td>
         <td>
@@ -87,8 +87,8 @@
         <td style="font-weight: bold; background: #f6fbff;">Services Provided</td>
     </tr>
     <tr style="height: 300px;">
-        <td style="width: 300px; height: 100px; vertical-align: top; text-align: center;font-weight: bold;">
-            {{$flight->turnaroundType}}
+        <td class="" style="width: 300px; height: 100px; vertical-align: top; text-align: center;font-weight: bold;">
+            1.) {{$flight->turnaroundType}}
 
         </td>
     </tr>
@@ -96,9 +96,9 @@
         <td style="font-weight: bold; background: #f6fbff;">Incidental Services Provided</td>
     </tr>
     <tr>
-        <td style="width: 300px; height: 100px; vertical-align: top; text-align: center;font-weight: bold;">
+        <td class="" style="width: 300px; height: 100px; vertical-align: top; text-align: center;font-weight: bold;">
 
-
+None
         </td>
 
 

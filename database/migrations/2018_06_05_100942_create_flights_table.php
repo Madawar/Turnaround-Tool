@@ -31,6 +31,7 @@ class CreateFlightsTable extends Migration
             $table->integer('delayCode')->nullable();
             $table->string('remarks')->nullable();
             $table->boolean('loaded')->nullable();
+            $table->boolean('transferred')->nullable();
             $table->timestamps();
         });
     }

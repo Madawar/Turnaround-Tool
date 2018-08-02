@@ -11,7 +11,7 @@
         props: {
             'value': {
 
-                default: 0
+                default: ''
             },
             'include':{
               type:Boolean,
@@ -83,17 +83,25 @@
                     vm.$emit('input', value)
                 },
                 onInitialize: function () {
-                    if (vm.value > 0) {
+                    if (vm.value != "") {
                         this.setValue(vm.value);
                     }
                 }
             });
-            if(this.value > 0){
+            if(this.value != ""){
                 var selectize = this.selector[0].selectize;
                 selectize.disable();
             }
             if (this.opts.length > 0) {
-                this.options = this.opts;
+                var selectize = this.selector[0].selectize;
+                selectize.clearOptions();
+                selectize.addOption(this.opts);
+                if (this.value != "") {
+                    console.log(this.value);
+                    selectize.setValue(this.value);
+                    selectize.enable();
+                }
+
             }
 
             if (this.url != "") {
@@ -136,7 +144,7 @@
                     selectize.refreshOptions();
                 }
 
-                if (this.value > 0) {
+                if (this.value != "") {
                     console.log(this.value);
                     selectize.setValue(this.value);
                     selectize.enable();

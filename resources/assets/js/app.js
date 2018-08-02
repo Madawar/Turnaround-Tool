@@ -14,7 +14,10 @@ import VueRouter from 'vue-router'
 import Flight from './components/Flights';
 import Service from './components/Services';
 import Task from './components/Task';
-
+import VTooltip from 'v-tooltip'
+import Vodal from 'vodal';
+import "vodal/common.css";
+import "vodal/door.css";
 
 var moment = require('moment');
 var debounce = require('debounce');
@@ -23,6 +26,7 @@ Vue.use(phonon);
 Vue.use(VueRouter);
 Vue.use(moment);
 Vue.use(debounce);
+Vue.use(VTooltip)
 
 
 
@@ -34,6 +38,7 @@ Vue.use(debounce);
 import { Datetime } from 'vue-datetime-2';
 
 Vue.component('datetime', Datetime);
+Vue.component(Vodal.name, Vodal);
 Vue.component('date', require('./components/datepicker.vue'));
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
 Vue.component('flight', require('./components/Flights'));

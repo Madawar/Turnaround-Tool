@@ -25,6 +25,8 @@ class Task extends Model
         return Helper::formatTimeForUser($value);
     }
 
+
+
     protected $appends = array('timed');
 
     public function getTimedAttribute($value)

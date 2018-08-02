@@ -10,6 +10,9 @@
     View Flights
 @endsection
 @section('content')
+    <style>
+
+    </style>
     <div id="app">
         <div class="container">
             <div class="card">
@@ -17,7 +20,11 @@
                     <h3 class="card-title">Flights</h3>
                     <div class="card-options">
 
-                        <a  class="btn btn-secondary btn-sm" href="{{action('FlightController@create')}}"><i class="fa fa-plus"></i> Add Flight</a>
+                        <a class="btn btn-secondary btn-sm" href="{{action('FlightController@create')}}" v-tooltip="{
+    content: 'Create A New Flight',
+    show: true,
+    trigger: 'manual',
+  }"><i class="fa fa-plus"></i> Add Flight</a>
 
                     </div>
                 </div>
@@ -39,12 +46,7 @@
             data: {
                 columns: [
 
-                    {
-                        name: 'id',
-                        title: 'ID',
-                        sortField: 'id',
-                        visible: true
-                    },
+
                     {
                         name: 'cx.carrier',
                         title: 'Carrier',
@@ -83,6 +85,14 @@
                         title: 'STD',
                         sortField: 'STD',
                         visible: true
+                    },{
+                        name: 'id',
+                        title: 'Update',
+                        sortField: 'id',
+                        visible: true,
+                        callback: function (value) {
+                            return '<a href="update/' + value + '" class="btn btn-success btn-sm"><i class="fe fe-clock"></i> Update</a>';
+                        }
                     },
 
 

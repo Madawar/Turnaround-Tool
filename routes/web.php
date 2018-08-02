@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/', function () {
+    return redirect()->action('FlightController@index');
+});
+
 Route::get('/pda', function () {
     return view('pda');
 });
@@ -22,8 +26,13 @@ Route::get('/meeting', function () {
 Route::resource('flight', 'FlightController');
 
 Route::resource('service', 'ServiceController');
+Route::resource('update', 'FlightUpdateController');
 Route::resource('task', 'TaskController');
 Route::resource('carrier', 'CarrierController');
 Route::get('report', 'ReportController@index');
 Route::post('report', 'ReportController@generateReport');
 
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');

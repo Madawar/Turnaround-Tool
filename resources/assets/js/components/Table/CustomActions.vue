@@ -1,8 +1,9 @@
 <template>
     <div class="custom-actions">
-        <a :href="rowData.view" class="btn btn-secondary btn-sm">{{rowData.button}}</a>
+        <a  :href="rowData.view" class="btn btn-secondary btn-sm"><i class="fe fe-eye"></i> {{rowData.button}}</a>
+        <div v-if="rowData.delete" :href="rowData.delete" @click="deleteItem(rowData)" class="btn btn-danger btn-sm"><i class="fe fe-trash-2"></i> Delete</div>
 
-        <a class="icon" :href="rowData.edit">
+        <a v-if="rowData.edit"  class="icon" :href="rowData.edit">
             <i class="fe fe-edit"></i>
         </a>
     </div>
@@ -24,7 +25,7 @@
             }
         },
         methods: {
-            itemAction (action, data, index) {
+            deleteItem (data) {
                 console.log(data.id);
                 this.$events.fire('delete-show', data.delete)
             }

@@ -4,7 +4,6 @@
         <div class="row no-gutters filterbar p-1">
             <div class="col">
                 <div class="btn-list pt-1">
-                    <div href="#" class="btn btn-secondary"><i class="fe fe-arrow-down-circle"></i> Download View</div>
                     <div v-on:click="resetFilter" href="#" class="btn btn-secondary"><i class="fa fa-eraser"></i> Reset Filter</div>
                 </div>
             </div>
@@ -54,7 +53,7 @@
 
             </div>
         </div>
-
+        <delete :show=show :delete_url="delete_url"></delete>
     </div>
 </template>
 
@@ -68,20 +67,25 @@
     import VueEvents from 'vue-events'
     import FilterBar from './FilterBar'
     import CustomActions from './CustomActions'
-    import DetailRow from '../details/DetailRow'
-    import TasksRow from '../details/TasksRow'
+    import MeetingRow from '../details/MeetingRow'
+    import UserRow from '../details/UserRow'
+    import Delete from './Delete.vue'
+    import Details from '../details/DetailRow'
 
     Vue.use(VueEvents)
     Vue.component('filter-bar', FilterBar)
     Vue.component('custom-actions', CustomActions)
-    Vue.component('my_detail_row', DetailRow)
-    Vue.component('tasks_row', TasksRow)
+    Vue.component('my_detail_row', Details)
+
+    Vue.component('meeting_row', MeetingRow)
+    Vue.component('user_row', UserRow)
 
     export default {
         components: {
             Vuetable,
             VuetablePagination,
-            VuetablePaginationInfo
+            VuetablePaginationInfo,
+            Delete
         },
         props: ['columns', 'url', 'filters', 'threshold','detail_row'],
         mounted: function () {

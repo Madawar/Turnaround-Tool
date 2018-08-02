@@ -47,6 +47,7 @@ class FullFlightSeeder extends Seeder
                 'STD' => $STD,
                 'arrival' => $arrival,
                 'departure' => $departure,
+                'turnaroundType'=>'Freighter Turnaround'
             ));
         }
 

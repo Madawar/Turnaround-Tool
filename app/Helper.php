@@ -11,7 +11,7 @@ namespace App;
 use Carbon\Carbon;
 use PDF;
 use Route;
-
+use Illuminate\Support\Facades\File;
 class Helper
 {
     public function isCurrent($path)
@@ -29,9 +29,12 @@ class Helper
     public function createReport($flight)
     {
         $name = str_slug($flight->cx->carrier . ' ' . $flight->flightNo . ' ' . $flight->flightDate);
-        $pdf = PDF::setOptions(['dpi' => 150, 'defaultPaperSize' => 'a4'])
-            ->loadView('report.flight_report', compact('flight'));
-        $pdf->save(storage_path("app/public/{$name}.pdf"));
+        $exists = File::exists(storage_path("app/public/{$name}.pdf"));
+        if (!$exists) {
+            $pdf = PDF::setOptions(['dpi' => 150, 'defaultPaperSize' => 'a4'])
+                ->loadView('report.flight_report', compact('flight'));
+            $pdf->save(storage_path("app/public/{$name}.pdf"));
+        }
         return $name . '.pdf';
     }
 
