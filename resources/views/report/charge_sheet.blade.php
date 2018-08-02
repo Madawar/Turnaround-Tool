@@ -32,7 +32,7 @@
 
     <tbody>
     <tr>
-        <td colspan="4" style="font-weight: bold; background: #f6fbff;">Flight Details {{url('/logo.jpg')}}</td>
+        <td colspan="4" style="font-weight: bold; background: #f6fbff;">Flight Details</td>
     </tr>
     <tr>
         <td>
@@ -72,7 +72,7 @@
 
         </td>
         <td colspan="2">
-            Parking Stand ARR : <u><b>NBO</b></u>
+            Parking Stand ARR : <u><b></b></u>
         </td>
 
     </tr>
