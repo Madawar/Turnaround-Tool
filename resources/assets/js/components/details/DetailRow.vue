@@ -1,6 +1,6 @@
 <template>
     <div @click="onClick">
-        <table v-if="rowData!=''" class="table card-table table-vcenter text-nowrap table-sm">
+        <table  v-if="rowData!=''" class="table card-table table-vcenter text-nowrap table-sm">
             <tr>
                 <th>Task Name</th>
                 <th>Status</th>
@@ -9,7 +9,7 @@
                 <th>Minutes</th>
 
             </tr>
-            <tr v-for="row in rowData.tasks">
+            <tr  v-for="row in rowData.tasks">
                 <td>{{row.taskName}}</td>
                 <td>{{row.status}}</td>
                 <td>{{row.startTime}}</td>
