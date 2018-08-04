@@ -23,6 +23,7 @@ class CreateTaskHistoriesTable extends Migration
             $table->time('timeOfAction')->nullable();
             $table->time('endTime')->nullable();
             $table->text('remarks')->nullable();
+            $table->integer('userId')
             $table->timestamps();
         });
     }
