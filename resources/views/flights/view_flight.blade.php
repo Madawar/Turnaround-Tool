@@ -19,6 +19,7 @@
                 <div id="chart_div"></div>
                 <div id='png'></div>
                 <hr/>
+
                 <h1 class="text-center">{{$flight->cx->carrier}} {{$flight->flightNo}} Turnaround Report</h1>
                 <h2 class="text-center">{{$flight->flightDate}}</h2>
                 <h5 class="text-center">
@@ -60,6 +61,7 @@
                         <th>Checklist</th>
                         <th>Start Time</th>
                         <th>End Time</th>
+                        <th>CutOff Time</th>
                         <th>Remarks</th>
                         <th>Time Taken (Mins)</th>
                         <th>Milestone Reached</th>
@@ -77,6 +79,7 @@
                                     <td>{{$task->task}}</td>
                                     <td>{{$task->startTime}}</td>
                                     <td>{{$task->endTime}}</td>
+                                    <td>{{$task->cutOffTime}}</td>
                                     <td>{{$task->remarks}}</td>
                                     <td>{{$task->minutes}} </td>
                                     <td></td>

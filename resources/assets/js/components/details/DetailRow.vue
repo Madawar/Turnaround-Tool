@@ -7,6 +7,7 @@
                 <th>Start Time</th>
                 <th>End Time</th>
                 <th>Minutes</th>
+                <th>cutOffTime</th>
 
             </tr>
             <tr  v-for="row in rowData.tasks">
@@ -15,6 +16,7 @@
                 <td>{{row.startTime}}</td>
                 <td>{{row.endTime}}</td>
                 <td>{{row.minutes}}</td>
+                <td>{{row.cutOffTime}}</td>
             </tr>
         </table>
         <div v-if="rowData==''" class="text-center"><b>No Data Yet</b></div>

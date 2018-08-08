@@ -8,7 +8,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-
+require('vue2-autocomplete-js/dist/style/vue2-autocomplete.css')
 import phonon from 'phonon/dist/js/phonon-core'
 import VueRouter from 'vue-router'
 import Flight from './components/Flights';
@@ -20,6 +20,8 @@ import "vodal/common.css";
 import "vodal/door.css";
 
 var moment = require('moment');
+window.moment = require('moment');
+
 var debounce = require('debounce');
 
 Vue.use(phonon);
@@ -47,6 +49,8 @@ Vue.component('task', require('./components/Task'));
 Vue.component('app', require('./components/App'));
 Vue.component('sl', require('./components/selectize/selectize'));
 Vue.component('vtable', require('./components/Table/Table'));
+Vue.component('fl', require('./components/charts/flight_details'));
+Vue.component('incid', require('./components/IncidentalService'));
 
 
 window.router = new VueRouter({

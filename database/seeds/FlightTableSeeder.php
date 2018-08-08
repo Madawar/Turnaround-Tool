@@ -11,7 +11,7 @@ class FlightTableSeeder extends Seeder
      */
     public function run()
     {
-
+        factory(App\User::class)->create();
 
         \App\Flight::create(array(
             'carrier' => 1,

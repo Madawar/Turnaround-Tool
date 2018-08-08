@@ -11,10 +11,13 @@
 @endsection
 @section('content')
     <style>
-
+.graph{
+    height: 100px;
+}
     </style>
     <div id="app">
         <div class="container">
+
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">Flights</h3>

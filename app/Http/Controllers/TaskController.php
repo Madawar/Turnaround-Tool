@@ -2,11 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TaskFormRequest;
 use App\Task;
 use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -34,7 +44,7 @@ class TaskController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request,TaskFormRequest $form)
     {
         Task::create($request->all());
         return redirect()->action('ServiceController@show', array('id' => $request->serviceId));
@@ -60,7 +70,7 @@ class TaskController extends Controller
     public function edit($id)
     {
         $task = Task::find($id);
-        $timed = $task->timed;
+        $timed = $task->timed === 'Yes'? 1: 0; ;
         $serviceId = $task->serviceId;
         return view('tasks.create_tasks')->with(compact('serviceId','task','timed'));
     }

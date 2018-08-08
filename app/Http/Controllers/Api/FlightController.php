@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Carrier;
 use App\Flight;
 use App\Http\Controllers\Controller;
+use App\Http\ExcelExports\FlightTasks;
 use Carbon\Carbon;
 use DB;
 use Helper;
@@ -12,6 +13,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use PDF;
 use Illuminate\Support\Facades\File;
+use Excel;
 class FlightController extends Controller
 {
     /**
@@ -172,7 +174,10 @@ class FlightController extends Controller
             return $service;
 
         });
-        $name = Helper::createReport($flight);
+        $report = str_random(20).'.xlsx';
+        Excel::store(new FlightTasks($flight),$report,'public');
+        $name = $report;
+       // $name = Helper::createReport($flight);
         return array('file' => array(Storage::url($name),Storage::url($charge_sheet.'.pdf')));
     }
 

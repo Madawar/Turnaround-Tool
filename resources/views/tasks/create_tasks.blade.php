@@ -11,6 +11,16 @@
     <div id="app">
         <div class="container">
             <div class="card">
+                @if(count($errors)>0)
+                    <div class="alert alert-danger">
+                        <ul>
+
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                 @if(isset($task))
                     {!! Form::model($task, ['action' => ['TaskController@update', $task->id], 'method' =>
                     'patch'])
@@ -43,25 +53,72 @@
 		<span class="input-group-prepend" id="timed">
 			<span class="input-group-text"><i class="fal fa-clock"></i></span>
         </span>
-                                    <sl id="timed" placeholder="Timed" name="timed" :opts="[{id:0,name:'Not Timed'},{id:1,name:'Timed'}]" v-model="timed" :opts="[]"></sl>
+                                    <sl id="timed" placeholder="Timed" name="timed"
+                                        :opts="[{id:0,name:'Not Timed'},{id:1,name:'Timed'}]" v-model="timed"
+                                        class="{{$errors->has('timed') ? 'form-control is-invalid' : ''}}"
+                                        :opts="[]"></sl>
                                     {!! $errors->first('timed', '<p class="invalid-feedback">:message</p>') !!}
                                 </div>
                             </div>
                         </div>
 
                     </div>
-                    </div>
-                    <div class='row'>
+                    <div class="border p-5 mt-5 mb-5 shadow-sm rounded">
+                        <h5 class="text-center">SLA Settings</h5>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('timeFrom', 'Timed From') !!}
+                                    <div class="input-group">
+               		<span class="input-group-prepend" id="timeFrom">
+               			<span class="input-group-text"><i class="fa fa-list"></i></span>
+                       </span>
+                                        {!! Form::select('timeFrom',array('STD'=>'STD','STA'=>'STA','ATA'=>'ATA','ATD'=>'ATD'), null, ['class' => $errors->has('timeFrom') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Timed From']) !!}
 
+                                        {!! $errors->first('timeFrom', '<p class="invalid-feedback">:message</p>') !!}
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('symbol', 'Symbol') !!}
+                                    <div class="input-group">
+		<span class="input-group-prepend" id="symbol">
+			<span class="input-group-text"><i class="fa fa-asterisk"></i></span>
+        </span>
+                                        {!! Form::text('symbol', null, ['class' => $errors->has('symbol') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Symbol']) !!}
+                                        {!! $errors->first('symbol', '<p class="invalid-feedback">:message</p>') !!}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    {!! Form::label('cutOffTime', 'Cuttof Time') !!}
+                                    <div class="input-group">
+		<span class="input-group-prepend" id="cutOffTime">
+			<span class="input-group-text"><i class="fa fa-clock"></i></span>
+        </span>
+                                        {!! Form::text('cutOffTime', null, ['class' => $errors->has('cutOffTime') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Cutoff Time']) !!}
+                                        {!! $errors->first('cutOffTime', '<p class="invalid-feedback">:message</p>') !!}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
+                    <input type="hidden" name="serviceId" value="{{$serviceId}}"/>
                 <div class="card-footer text-right">
                     <button class="btn btn-primary btn-block">Save</button>
                 </div>
-                    <input type="hidden" name="serviceId" value="{{$serviceId}}"/>
-                {!! Form::close() !!}
+
             </div>
+
+
+            {!! Form::close() !!}
         </div>
+    </div>
     </div>
 @endsection
 
@@ -71,7 +128,7 @@
         app = new Vue({
             el: '#app',
             data: {
-                timed:'{{$timed or null}}'
+                timed: '{{$timed or old('timed',null)}}'
             }
         });
     </script>

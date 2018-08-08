@@ -18,6 +18,7 @@ class CreateTaskHistoriesTable extends Migration
             $table->integer('serviceId')->unsigned();
             $table->integer('taskId')->unsigned();
             $table->integer('flightId')->unsigned();
+            $table->time('cutOffTime')->nullable();
             $table->boolean('completed')->nullable();
             $table->time('startTime')->nullable();
             $table->time('timeOfAction')->nullable();

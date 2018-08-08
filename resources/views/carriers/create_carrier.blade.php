@@ -54,7 +54,7 @@
                     <div class='row'>
                         <div class='col-md-6'>
                             <div class="form-group">
-                                {!! Form::label('passengerTurnaroundTime', 'clock') !!}
+                                {!! Form::label('passengerTurnaroundTime', 'Passenger Average Turnaround Time') !!}
                                 <div class="input-group">
 		<span class="input-group-prepend" id="passengerTurnaroundTime">
 			<span class="input-group-text"><i class="fal fa-clock"></i></span>

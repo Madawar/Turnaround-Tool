@@ -25,9 +25,13 @@
             <td>{{$flight->ATA}}</td>
             <td>{{$flight->ATD}}  </td>
             <td>
-                @foreach($flight->tasks->chunk(2) as $chunk)
+                {{$flight->turnaroundType}}
+                @if(count($flight->incidentals)>0)
+                    ,
+                @endif
+                @foreach($flight->incidentals->chunk(2) as $chunk)
                     @foreach($chunk as $task)
-                        {{$task->task->task}}
+                        {{ucfirst($task->incidentalService)}}
                         @if ($loop->last)
                             <br/>
                         @else

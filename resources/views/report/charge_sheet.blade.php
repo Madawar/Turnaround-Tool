@@ -26,7 +26,7 @@
 
 
 <h1 class="text-center">Aircraft Turnaround Charge Sheet</h1>
-<h2 class="text-center ">Date : <span class="">{{\Carbon\Carbon::today()->format('dFY')}}</span></h2>
+<h2 class="text-center ">Date : <span class="">{{\Carbon\Carbon::createFromFormat('Y-m-d',$flight->flightDate)->format('dFY')}}</span></h2>
 <hr/>
 <table class="table card-table table-vcenter text-nowrap table-bordered">
 

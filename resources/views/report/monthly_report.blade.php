@@ -16,6 +16,16 @@
                     <h3 class="card-title">Generate Report</h3>
                 </div>
                 <div class="card-body">
+                    @if(count($errors)>0)
+                        <div class="alert alert-danger">
+                            <ul>
+
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
@@ -79,17 +89,27 @@
             @if(isset($carrier))
                 <div class="card">
 
-
-                        <h5 class="text-center">
-                            <div v-if="download === 0"><i class="fa fa-spinner fa-spin"></i> Generating Report</div>
-                            <div v-if="download === 1">
-                                <a :href="url"><a :href="url"><i class="fa fa-download"></i> Download
-                                        Report</a></a>
-                            </div>
-
-                        </h5>
-                        @include("report.{$reportName}")
+                    <div class=" p-5 mt-5 mb-5 shadow-sm rounded">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="{{$ffile or ''}}" class="btn btn-info  btn-flat bg- btn-block"><i class="fa fa-download"></i> Download Finance File</a>
+                        </div>
+                        <div class="col-md-6">
+                            <a href="{{$ofile  or ''}}" class="btn btn-info btn-flat bg- btn-block"><i class="fa fa-download"></i> Download Operations File</a>
+                        </div>
                     </div>
+                    </div>
+
+                    <h5 class="text-center">
+                        <div v-if="download === 0"><i class="fa fa-spinner fa-spin"></i> Generating Report</div>
+                        <div v-if="download === 1">
+                            <a :href="url"><a :href="url"><i class="fa fa-download"></i> Download
+                                    Report</a></a>
+                        </div>
+
+                    </h5>
+                    @include("report.{$reportName}")
+                </div>
 
 
             @endif

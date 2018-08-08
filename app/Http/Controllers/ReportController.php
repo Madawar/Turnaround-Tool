@@ -3,18 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Carrier;
+use App\Http\ExcelExports\CarrierReport;
+use App\Http\ExcelExports\FinanceReport;
+use App\Http\Requests\ReportFormRequest;
 use Helper;
 use Illuminate\Http\Request;
 use PDF;
 use Illuminate\Support\Facades\Storage;
+use Excel;
 class ReportController extends Controller
 {
+    /**
+     * Create a new controller instance.
+     *
+     * @return void
+     */
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
+
     public function index()
     {
         return view('report.monthly_report');
     }
 
-    public function generateReport(Request $request)
+    public function generateReport(Request $request, ReportFormRequest $form)
     {
         $carrier = Carrier::with(['flights' => function ($query) use ($request) {
             $query->with('tasks.task')->where('flightDate', '>=', $request->from)
@@ -79,6 +93,14 @@ class ReportController extends Controller
         $from = $request->from;
         $to = $request->to;
         $reportName = $request->reportName;
+        $finance_report = str_random(20).'.xlsx';
+        $operations_report = str_random(20).'.xlsx';
+
+      //  dd($finance_report);
+        Excel::store(new FinanceReport($carrier,$request,$from,$to),$finance_report,'public');
+        Excel::store(new CarrierReport($carrier,$request,$from,$to),$operations_report,'public');
+        $ffile = Storage::url($finance_report);
+        $ofile = Storage::url($operations_report);
         if ($request->ajax()) {
             $name = str_slug($carrier->carrier . ' ' . $from . ' ' . $to);
             $pdf = PDF::setOptions(['dpi' => 150, 'defaultPaperSize' => 'a4'])
@@ -87,6 +109,6 @@ class ReportController extends Controller
             return array('file'=>Storage::url($name . '.pdf'));
         }
         $ajaxObj = json_encode(array('carrier' => $carrier->id, 'from' => $from, 'to' => $to, 'reportName'=>$request->reportName));
-        return view('report.monthly_report')->with(compact('carrier', 'request', 'from', 'to','ajaxObj','reportName'));
+        return view('report.monthly_report')->with(compact('ffile','ofile','carrier', 'request', 'from', 'to','ajaxObj','reportName'));
     }
 }
