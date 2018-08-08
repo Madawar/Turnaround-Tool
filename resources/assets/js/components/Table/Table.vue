@@ -1,11 +1,14 @@
 <template>
 
     <div class="vtable">
-        <div class="row no-gutters filterbar p-1">
+        <div class="row no-gutters filterbar p-1 shadow border bg-purple">
             <div class="col">
                 <div class="btn-list pt-1">
                     <div v-on:click="resetFilter" href="#" class="btn btn-secondary"><i class="fa fa-eraser"></i> Reset Filter</div>
                 </div>
+            </div>
+            <div class="col text-center">
+                <div v-if="loading==1" class="loader"></div>
             </div>
             <div class="col">
                 <div class="float-right pt-1">
@@ -21,7 +24,7 @@
         </div>
 
 
-        <div class="table-responsive">
+        <div class="table-responsive ">
             <vuetable
                     ref="vuetable"
                     :api-url="url"
@@ -168,7 +171,21 @@
             }
         },
         events: {
+            'vuetable:loading': function() {
+                // display your loading notification
+                this.loading = 1;
+                // console.log ("load started");
+            },
 
+            /** Disable the loader ---------------------------------
+             * dispatched when vuetable receives response from server.
+             * Response from server passed as the event argument
+             */
+            'vuetable:load-success': function(response) {
+                // hide loading notification
+                // console.log ("load completed");
+                this.loading = 0;
+            },
             'delete-show'(data) {
                 this.delete_url = data;
                 this.show = true;
@@ -227,6 +244,9 @@
 
 </script>
 <style scoped>
+    .loader{
+        margin: 0 auto !important;
+    }
     .vtable {
         padding-bottom: 20px;
     }

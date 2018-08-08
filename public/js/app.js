@@ -83999,7 +83999,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n.vtable[data-v-3c5c7c79] {\n    padding-bottom: 20px;\n}\n.vuetable[data-v-3c5c7c79] {\n    border-bottom: 1px solid rgba(0, 40, 100, 0.12);\n    margin-bottom: 10px;\n}\n.pagination[data-v-3c5c7c79] {\n    margin: 0;\n    float: right;\n}\n.pagination a[data-v-3c5c7c79] {\n    text-decoration: none;\n    cursor: pointer;\n}\n.pagination a.page-link[data-v-3c5c7c79] {\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 10px;\n    margin-right: 2px;\n}\n.pagination a.page-link.active[data-v-3c5c7c79] {\n    color: white;\n    background-color: #337ab7;\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 10px;\n    margin-right: 2px;\n}\n.pagination a.btn-nav[data-v-3c5c7c79] {\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 7px;\n    margin-right: 2px;\n}\n.pagination a.btn-nav.disabled[data-v-3c5c7c79] {\n    color: lightgray;\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 7px;\n    margin-right: 2px;\n    cursor: not-allowed;\n}\n.pagination-info[data-v-3c5c7c79] {\n    float: left;\n}\nth.sortable[data-v-3c5c7c79]:hover {\n    text-decoration: none !important;\n}\n.filterbar[data-v-3c5c7c79] {\n    background: #f8f9fa;\n}\n", ""]);
+exports.push([module.i, "\n.loader[data-v-3c5c7c79]{\n    margin: 0 auto !important;\n}\n.vtable[data-v-3c5c7c79] {\n    padding-bottom: 20px;\n}\n.vuetable[data-v-3c5c7c79] {\n    border-bottom: 1px solid rgba(0, 40, 100, 0.12);\n    margin-bottom: 10px;\n}\n.pagination[data-v-3c5c7c79] {\n    margin: 0;\n    float: right;\n}\n.pagination a[data-v-3c5c7c79] {\n    text-decoration: none;\n    cursor: pointer;\n}\n.pagination a.page-link[data-v-3c5c7c79] {\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 10px;\n    margin-right: 2px;\n}\n.pagination a.page-link.active[data-v-3c5c7c79] {\n    color: white;\n    background-color: #337ab7;\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 10px;\n    margin-right: 2px;\n}\n.pagination a.btn-nav[data-v-3c5c7c79] {\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 7px;\n    margin-right: 2px;\n}\n.pagination a.btn-nav.disabled[data-v-3c5c7c79] {\n    color: lightgray;\n    border: 1px solid lightgray;\n    border-radius: 3px;\n    padding: 5px 7px;\n    margin-right: 2px;\n    cursor: not-allowed;\n}\n.pagination-info[data-v-3c5c7c79] {\n    float: left;\n}\nth.sortable[data-v-3c5c7c79]:hover {\n    text-decoration: none !important;\n}\n.filterbar[data-v-3c5c7c79] {\n    background: #f8f9fa;\n}\n", ""]);
 
 // exports
 
@@ -84032,6 +84032,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__Delete_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__Delete_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__details_DetailRow__ = __webpack_require__(374);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__details_DetailRow___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__details_DetailRow__);
+//
+//
+//
 //
 //
 //
@@ -84207,6 +84210,21 @@ __WEBPACK_IMPORTED_MODULE_3_vue___default.a.component('user_row', __WEBPACK_IMPO
         }
     },
     events: {
+        'vuetable:loading': function vuetableLoading() {
+            // display your loading notification
+            this.loading = 1;
+            // console.log ("load started");
+        },
+
+        /** Disable the loader ---------------------------------
+         * dispatched when vuetable receives response from server.
+         * Response from server passed as the event argument
+         */
+        'vuetable:load-success': function vuetableLoadSuccess(response) {
+            // hide loading notification
+            // console.log ("load completed");
+            this.loading = 0;
+        },
         'delete-show': function deleteShow(data) {
             this.delete_url = data;
             this.show = true;
@@ -90076,67 +90094,75 @@ var render = function() {
     "div",
     { staticClass: "vtable" },
     [
-      _c("div", { staticClass: "row no-gutters filterbar p-1" }, [
-        _c("div", { staticClass: "col" }, [
-          _c("div", { staticClass: "btn-list pt-1" }, [
-            _c(
-              "div",
-              {
-                staticClass: "btn btn-secondary",
-                attrs: { href: "#" },
-                on: { click: _vm.resetFilter }
-              },
-              [
-                _c("i", { staticClass: "fa fa-eraser" }),
-                _vm._v(" Reset Filter")
-              ]
-            )
-          ])
-        ]),
-        _vm._v(" "),
-        _c("div", { staticClass: "col" }, [
-          _c("div", { staticClass: "float-right pt-1" }, [
-            _c("div", { staticClass: "input-icon mb-3" }, [
-              _c("input", {
-                directives: [
-                  {
-                    name: "model",
-                    rawName: "v-model",
-                    value: _vm.filterText,
-                    expression: "filterText"
-                  }
-                ],
-                staticClass: "form-control",
-                attrs: { type: "text", placeholder: "Search for..." },
-                domProps: { value: _vm.filterText },
-                on: {
-                  keyup: function($event) {
-                    if (
-                      !("button" in $event) &&
-                      _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
-                    ) {
-                      return null
+      _c(
+        "div",
+        { staticClass: "row no-gutters filterbar p-1 shadow border bg-purple" },
+        [
+          _c("div", { staticClass: "col" }, [
+            _c("div", { staticClass: "btn-list pt-1" }, [
+              _c(
+                "div",
+                {
+                  staticClass: "btn btn-secondary",
+                  attrs: { href: "#" },
+                  on: { click: _vm.resetFilter }
+                },
+                [
+                  _c("i", { staticClass: "fa fa-eraser" }),
+                  _vm._v(" Reset Filter")
+                ]
+              )
+            ])
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col text-center" }, [
+            _vm.loading == 1 ? _c("div", { staticClass: "loader" }) : _vm._e()
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "col" }, [
+            _c("div", { staticClass: "float-right pt-1" }, [
+              _c("div", { staticClass: "input-icon mb-3" }, [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.filterText,
+                      expression: "filterText"
                     }
-                    return _vm.doFilter($event)
-                  },
-                  input: function($event) {
-                    if ($event.target.composing) {
-                      return
+                  ],
+                  staticClass: "form-control",
+                  attrs: { type: "text", placeholder: "Search for..." },
+                  domProps: { value: _vm.filterText },
+                  on: {
+                    keyup: function($event) {
+                      if (
+                        !("button" in $event) &&
+                        _vm._k($event.keyCode, "enter", 13, $event.key, "Enter")
+                      ) {
+                        return null
+                      }
+                      return _vm.doFilter($event)
+                    },
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.filterText = $event.target.value
                     }
-                    _vm.filterText = $event.target.value
                   }
-                }
-              }),
-              _vm._v(" "),
-              _vm._m(0)
+                }),
+                _vm._v(" "),
+                _vm._m(0)
+              ])
             ])
           ])
-        ])
-      ]),
+        ]
+      ),
       _vm._v(" "),
       _c(
         "div",
-        { staticClass: "table-responsive" },
+        { staticClass: "table-responsive " },
         [
           _c("vuetable", {
             ref: "vuetable",
