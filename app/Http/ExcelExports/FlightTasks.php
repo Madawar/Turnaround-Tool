@@ -86,7 +86,7 @@ class FlightTasks implements FromView, WithEvents
                 'bold' => false,
             ],
             'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT,
                 'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
             ],
             'borders' => [
@@ -108,7 +108,7 @@ class FlightTasks implements FromView, WithEvents
             ],
         ];
         $event->sheet->getColumnDimension('A')->setWidth(3);
-        $event->sheet->getColumnDimension('B')->setWidth(25);
+        $event->sheet->getColumnDimension('B')->setWidth(39);
         $event->sheet->getColumnDimension('C')->setWidth(12);
         $event->sheet->getColumnDimension('D')->setWidth(12);
         $event->sheet->getColumnDimension('E')->setWidth(28);
@@ -116,6 +116,7 @@ class FlightTasks implements FromView, WithEvents
         $event->sheet->getStyle('A4:E4')->applyFromArray($styleArray);
         $count = $event->sheet->getHighestDataRow();
         $event->sheet->getStyle("A5:E{$count}")->applyFromArray($normalStyle);
+        $event->sheet->getStyle("A5:E{$count}")->getAlignment()->setWrapText(true);
         for ($x = 5; $x <= $count; $x++) {
             $event->sheet->getRowDimension($x)->setRowHeight(27);
         }
