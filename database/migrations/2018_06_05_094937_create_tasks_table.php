@@ -23,6 +23,8 @@ class CreateTasksTable extends Migration
             $table->double('cutOffTime', 16, 2)->nullable();
             $table->string('symbol')->nullable();
             $table->integer('order')->nullable();
+            $table->string('minutesToBeDoneAppliesTo')->nullable();
+            $table->double('minutesToBeDone')->nullable();
             $table->timestamps();
         });
     }

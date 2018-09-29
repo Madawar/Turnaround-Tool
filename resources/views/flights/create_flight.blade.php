@@ -41,18 +41,18 @@
                         <div class="row">
                             <div class="col-md-12">
 
-                                    <div class="form-group">
-                                        {!! Form::label('turnaroundType', 'Turnaround Type') !!}
-                                        <div class="input-group">
+                                <div class="form-group">
+                                    {!! Form::label('turnaroundType', 'Turnaround Type') !!}
+                                    <div class="input-group">
 		<span class="input-group-prepend" id="turnaroundType">
 			<span class="input-group-text"><i class="fe fe-refresh-ccw"></i></span>
         </span>
-                                            <sl id="turnaroundType" placeholder="Turnaround Type" name="turnaroundType"
-                                                v-model="turnaroundType"
-                                                class="{{$errors->has('turnaroundType') ? 'form-control is-invalid' : ''}}"
-                                                :opts="[{id:'Freighter Turnaround',name:'Freighter Turnaround'},{id:'Passenger Turnaround',name:'Passenger Turnaround'},{id:'Freight Transit',name:'Freight Transit'},{id:'Passenger Transit',name:'Passenger Transit'}]"></sl>
+                                        <sl id="turnaroundType" placeholder="Turnaround Type" name="turnaroundType"
+                                            v-model="turnaroundType"
+                                            class="{{$errors->has('turnaroundType') ? 'form-control is-invalid' : ''}}"
+                                            :opts="[{id:'Freighter Turnaround',name:'Freighter Turnaround'},{id:'Passenger Turnaround',name:'Passenger Turnaround'},{id:'Freight Transit',name:'Freight Transit'},{id:'Passenger Transit',name:'Passenger Transit'}]"></sl>
 
-                                            {!! $errors->first('turnaroundType', '<p class="invalid-feedback">:message</p>') !!}
+                                        {!! $errors->first('turnaroundType', '<p class="invalid-feedback">:message</p>') !!}
 
                                     </div>
                                 </div>
@@ -94,7 +94,8 @@
 		<span class="input-group-prepend" id="flightDate">
 			<span class="input-group-text"><i class="fal fa-calendar"></i></span>
         </span>
-                                        <date name="flightDate" v-model="flightDate" autocomplete="off"  class="{{$errors->has('turnaroundType') ? 'form-control is-invalid' : 'form-control'}}"
+                                        <date name="flightDate" v-model="flightDate" autocomplete="off"
+                                              class="{{$errors->has('turnaroundType') ? 'form-control is-invalid' : 'form-control'}}"
                                               placeholder="Flight Date"></date>
                                         {!! $errors->first('flightDate', '<p class="invalid-feedback">:message</p>') !!}
                                     </div>
@@ -219,10 +220,10 @@
                         </div>
                     </div>
 
-                        <div class="p-5 mt-5 mb-5 border border-info  shadow-sm rounded">
-                            <h5 class="text-center">Incidental Services</h5>
-                            <incid :serv="incids" v-model="incids"></incid>
-                        </div>
+                    <div class="p-5 mt-5 mb-5 border border-info  shadow-sm rounded">
+                        <h5 class="text-center">Incidental Services</h5>
+                        <incid :serv="incids" v-model="incids"></incid>
+                    </div>
 
                     <div class="p-5 mt-5 mb-5 border border-success  shadow-sm rounded">
                         <h5 class="text-center">After The Flight</h5>
@@ -310,10 +311,36 @@
                         </div>
                     </div>
 
+                    <div class="p-5 mt-5 mb-5 border border-success  shadow-sm rounded">
+                        <h5 class="text-center">OSH</h5>
+                        <div class="form-group">
+                            {!! Form::label('hasOshIssue', trans('Had Incidental Issues')) !!}
+                            <div class="input-group">
+                        		<span class="input-group-prepend" id="hasOshIssue">
+                        			<span class="input-group-text"><i class="fa fa-warning"></i></span>
+                                </span>
+                                {!! Form::select('hasOshIssue',array('0'=>'No','1'=>'Yes'), null, ['class' => $errors->has('hasOshIssue') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Had OSH Issues']) !!}
 
+                                {!! $errors->first('hasOshIssue', '<p class="invalid-feedback">:message</p>') !!}
+                            </div>
+
+                            <div class="form-group">
+                                  {!! Form::label('oshDescription', trans('Incident Description')) !!}
+                            	  <div class="input-group">
+                            		<span class="input-group-prepend" id="oshDescription">
+                            			<span class="input-group-text"><i class="fa fa-comment"></i></span>
+                                    </span>
+                                   {!! Form::textarea('oshDescription', null, ['class' => $errors->has('oshDescription') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'OSH Description']) !!}
+                            	   {!! $errors->first('oshDescription', '<p class="invalid-feedback">:message</p>') !!}
+                            	</div>
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
 
-<input type="hidden" :value="JSON.stringify(incids)" name="incids"/>
+                <input type="hidden" :value="JSON.stringify(incids)" name="incids"/>
                 <div class="card-footer text-right">
                     <button class="btn btn-primary btn-block">Save</button>
                 </div>
@@ -333,7 +360,7 @@
     <script>
         app = new Vue({
             el: '#app',
-            mounted(){
+            mounted() {
                 moment();
 
             },
@@ -352,10 +379,12 @@
                 flightType: '{{$flightType or old('flightType',0)}}',
                 delayCode: '{{$delayCode or old('delayCode',0)}}',
             },
-            computed:{
-                maxDate(){
-                    if(this.flightDate != ""){
-                       return moment(this.flightDate, "YYYY/MM/DD").add('days', 2).format('YYYY/MM/DD')
+            computed: {
+                maxDate() {
+                    if (this.flightDate != "") {
+                        console.log(moment(this.flightDate, "YYYY/MM/DD").add(2, 'days').format('YYYY/MM/DD'));
+                        return "2018/08/22";
+                        return moment(this.flightDate, "YYYY/MM/DD").add(2, 'days').format('YYYY/MM/DD');
                     }
                     return "";
                 }

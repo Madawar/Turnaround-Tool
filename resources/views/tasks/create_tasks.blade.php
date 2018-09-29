@@ -105,10 +105,39 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('minutesToBeDoneAppliesTo', trans('Flight Type')) !!}
+                                    <div class="input-group">
+                        		<span class="input-group-prepend" id="minutesToBeDoneAppliesTo">
+                        			<span class="input-group-text"><i class="fa fa-list"></i></span>
+                                </span>
+                                        {!! Form::select('minutesToBeDoneAppliesTo',array('F'=>'Freighter','P'=>'Passenger'), null, ['class' => $errors->has('minutesToBeDoneAppliesTo') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Applies to']) !!}
+
+                                        {!! $errors->first('minutesToBeDoneAppliesTo', '<p class="invalid-feedback">:message</p>') !!}
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    {!! Form::label('minutesToBeDone', trans('Approximate Time Action is Required To Be Done in')) !!}
+                                    <div class="input-group">
+                                		<span class="input-group-prepend" id="minutesToBeDone">
+                                			<span class="input-group-text"><i class="fa fa-clock"></i></span>
+                                        </span>
+                                        {!! Form::text('minutesToBeDone', null, ['class' => $errors->has('minutesToBeDone') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Minutes To Be Done']) !!}
+                                        {!! $errors->first('minutesToBeDone', '<p class="invalid-feedback">:message</p>') !!}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
 
                 </div>
-                    <input type="hidden" name="serviceId" value="{{$serviceId}}"/>
+                <input type="hidden" name="serviceId" value="{{$serviceId}}"/>
                 <div class="card-footer text-right">
                     <button class="btn btn-primary btn-block">Save</button>
                 </div>

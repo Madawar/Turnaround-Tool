@@ -138,6 +138,31 @@ class FlightController extends Controller
                         $timing = $endTime->diffInMinutes($startTime);
                         $hours = $endTime->diffInHours($startTime);
                         $milli = $endTime->diffInSeconds($startTime) * 1000;
+
+                        if($record->cutOffTime != ""){
+                            $cutOffTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate . ' ' . $record->cutOffTime);
+                            if($startTime->greaterThan($cutOffTime)){
+                                $task->isMilestoneReached = "Started Off Late";
+                            }
+                        }
+
+                        if($task->minutesToBeDone != ""){
+                            if($flight->flightType = 'P' && $task->minutesToBeDoneAppliesTo){
+                                if($timing > $task->minutesToBeDone){
+                                    $task->isMilestoneReached = $task->isMilestoneReached . "/ Delayed";
+                                }else{
+                                    $task->isMilestoneReached = $task->isMilestoneReached . "/ On Time";
+                                }
+                            }else{
+                                if($timing > $task->minutesToBeDone){
+                                    $task->isMilestoneReached = $task->isMilestoneReached . "/ Delayed";
+                                }else{
+                                    $task->isMilestoneReached = $task->isMilestoneReached . "/ On Time";
+                                }
+                            }
+
+                        }
+
                         $task->minutes = $timing;
                         $task->milli = $milli;
                         $task->remarks = $record->remarks;

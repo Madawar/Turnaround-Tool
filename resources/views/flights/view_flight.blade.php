@@ -82,7 +82,7 @@
                                     <td>{{$task->cutOffTime}}</td>
                                     <td>{{$task->remarks}}</td>
                                     <td>{{$task->minutes}} </td>
-                                    <td></td>
+                                    <td>{{$task->isMilestoneReached}}</td>
 
                                 </tr>
                             @endforeach

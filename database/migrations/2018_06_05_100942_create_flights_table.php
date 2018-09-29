@@ -32,6 +32,8 @@ class CreateFlightsTable extends Migration
             $table->string('remarks')->nullable();
             $table->boolean('loaded')->nullable();
             $table->boolean('transferred')->nullable();
+            $table->text('oshDescription')->nullable();
+            $table->boolean('hasOshIssue')->nullable();
             $table->timestamps();
         });
     }

@@ -6,6 +6,7 @@ use App\Flight;
 use App\TaskHistory;
 use Helper;
 use Illuminate\Http\Request;
+use Auth;
 
 class FlightUpdateController extends Controller
 {
@@ -102,13 +103,14 @@ class FlightUpdateController extends Controller
         foreach ($data as $time) {
 
             $task = TaskHistory::firstOrCreate(
-                ['flightId' => $time['flightId'], 'serviceId' => $time['serviceId'], 'taskId' => $time['taskId']]
+                ['flightId' => $time['flightId'], 'serviceId' => $time['serviceId'], 'taskId' => $time['taskId'],'userId'=>0]
 
             );
             $task->update(array(
                 'startTime' => Helper::formatTime($time['startTime']),
                 'endTime' => Helper::formatTime($time['endTime']),
                 'remarks' => $time['remarks'],
+
             ));
         }
         return redirect()->action('FlightController@show', array('id'=>$id));

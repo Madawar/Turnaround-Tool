@@ -21,7 +21,7 @@
                 <h3 class="card-title">Manual Flight Details</h3>
             </div>
 
-            <div id="app">
+            <div id="app" class="table-responsive">
 
 
                 <table class="table card-table table-vcenter text-nowrap">

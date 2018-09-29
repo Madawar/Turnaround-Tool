@@ -36,7 +36,7 @@ class FlightFormRequest extends FormRequest
             'flightDate' => 'required|date',
             'departure' => 'date|after:arrival|nullable',
             'arrival' => 'date|nullable',
-            'STD' => 'required|date|after:arrival',
+            'STD' => 'required|date|after:STA',
             'STA' => 'required|date',
         ];
     }

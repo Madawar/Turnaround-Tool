@@ -43,6 +43,7 @@
     "vue-router": "^3.0.1",
     "vue-tabs-component": "^1.4.0",
     "vue2-autocomplete-js": "^0.2.2",
+    "vue2-datepicker": "^2.4.1",
     "vue2-dropzone": "^3.2.2",
     "vuedraggable": "^2.16.0"
   }
