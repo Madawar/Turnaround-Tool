@@ -382,9 +382,7 @@
             computed: {
                 maxDate() {
                     if (this.flightDate != "") {
-                        console.log(moment(this.flightDate, "YYYY/MM/DD").add(2, 'days').format('YYYY/MM/DD'));
-                        return "2018/08/22";
-                        return moment(this.flightDate, "YYYY/MM/DD").add(2, 'days').format('YYYY/MM/DD');
+                        
                     }
                     return "";
                 }
