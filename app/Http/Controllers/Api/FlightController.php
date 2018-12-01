@@ -8,12 +8,13 @@ use App\Http\Controllers\Controller;
 use App\Http\ExcelExports\FlightTasks;
 use Carbon\Carbon;
 use DB;
+use Excel;
 use Helper;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use PDF;
-use Illuminate\Support\Facades\File;
-use Excel;
+
 class FlightController extends Controller
 {
     /**
@@ -47,7 +48,7 @@ class FlightController extends Controller
 
     public function page(Request $request)
     {
-        $flight = Flight::with('cx', 'tasks.task')->orderBy('STA','DESC');
+        $flight = Flight::with('cx', 'tasks.task')->orderBy('STA', 'DESC');
 
         if ($request->filter) {
 
@@ -114,9 +115,9 @@ class FlightController extends Controller
     {
 
         $flight = Flight::with('services.tasks.records')->with('tasks')->find($id);
-        $charge_sheet = str_slug($flight->cx->carrier . ' ' . $flight->flightNo . ' ' . $flight->flightDate).'_chargesheet';
+        $charge_sheet = str_slug($flight->cx->carrier . ' ' . $flight->flightNo . ' ' . $flight->flightDate) . '_chargesheet';
         $exists = File::exists(storage_path("app/public/{$charge_sheet}.pdf"));
-        if(!$exists){
+        if (!$exists) {
             $pdf = PDF::setOptions(['dpi' => 150, 'defaultPaperSize' => 'a4', 'isRemoteEnabled' => true])
                 ->loadView('report.charge_sheet', compact('flight'));
             $pdf->save(storage_path("app/public/{$charge_sheet}.pdf"));
@@ -174,11 +175,11 @@ class FlightController extends Controller
             return $service;
 
         });
-        $report = str_random(20).'.xlsx';
-        Excel::store(new FlightTasks($flight),$report,'public');
+        $report = str_random(20) . '.xlsx';
+        Excel::store(new FlightTasks($flight), $report, 'public');
         $name = $report;
-       // $name = Helper::createReport($flight);
-        return array('file' => array(Storage::url($name),Storage::url($charge_sheet.'.pdf')));
+        // $name = Helper::createReport($flight);
+        return array('file' => array(Storage::url($name), Storage::url($charge_sheet . '.pdf')));
     }
 
     /**

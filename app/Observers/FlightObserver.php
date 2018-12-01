@@ -18,6 +18,39 @@ class FlightObserver
     {
 
 
+    }
+
+    /**
+     * Handle the User "created" event.
+     *
+     * @param  \App\User $user
+     * @return void
+     */
+    public function created(Flight $flight)
+    {
+        $month = Carbon::createFromFormat('Y/m/d', $flight->flightDate);
+        $count = Flight::where('flightDate', '>=', $month->startOfMonth())->where('carrier', $flight->carrier)->count();
+        $sheetNo = $month->format('Ym') . str_pad($count, 4, "0", STR_PAD_LEFT);
+        $flight->serial = $sheetNo;
+        $flight->save();
+    }
+
+    /**
+     * Handle the User "updated" event.
+     *
+     * @param  \App\User $user
+     * @return void
+     */
+    public function updated(Flight $flight)
+    {
+        if ($flight->serial == "") {
+            $month = Carbon::createFromFormat('Y-m-d', $flight->flightDate);
+            $count = Flight::where('flightDate', '>=', $month->startOfMonth())->where('carrier', $flight->carrier)->count();
+            $sheetNo = $month->format('Ym') . str_pad($count, 4, "0", STR_PAD_LEFT);
+            $flight->serial = $sheetNo;
+            $flight->save();
+        }
 
     }
+
 }

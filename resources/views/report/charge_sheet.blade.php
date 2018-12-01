@@ -2,6 +2,7 @@
 <head>
     <link rel="stylesheet" href="{{url('css/bundle.css')}}" type="text/css" media="all"/>
     <link rel="stylesheet" href="{{url('css/dashboard.css')}}" type="text/css" media="all"/>
+    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
     <style>
         body {
             background: #fff !important;
@@ -18,15 +19,21 @@
             left: 0px;
             right: 0px;
         }
+        .sheetno {
+            font-family: 'Orbitron', sans-serif;
+            color: red;
+            font-size: 25px;
+            float: right;
+        }
     </style>
 </head>
 <body>
-
+<div class="sheetno">{{$flight->serial}}</div>
 <img width="200px" src="{{url('/logo.jpg')}}">
 
 
 <h1 class="text-center">Aircraft Turnaround Charge Sheet</h1>
-<h2 class="text-center ">Date : <span class="">{{\Carbon\Carbon::createFromFormat('Y-m-d',$flight->flightDate)->format('dFY')}}</span></h2>
+<h2 class="text-center ">Date : <span class="">{!!  \Carbon\Carbon::createFromFormat('Y-m-d',$flight->flightDate)->format('j<\s\up>S<\/\s\up> F, Y')!!}</span></h2>
 <hr/>
 <table class="table card-table table-vcenter text-nowrap table-bordered">
 
