@@ -29,7 +29,7 @@ class FlightObserver
     public function created(Flight $flight)
     {
         $month = Carbon::createFromFormat('Y/m/d', $flight->flightDate);
-        $count = Flight::where('flightDate', '>=', $month->startOfMonth())->where('carrier', $flight->carrier)->count();
+        $count = Flight::where('flightDate', '>=', $month->startOfMonth())->where('flightDate','<=',$month)->where('id','<',$flight->id)->where('carrier', $flight->carrier)->count();
         $sheetNo = $month->format('Ym') . str_pad($count, 4, "0", STR_PAD_LEFT);
         $flight->serial = $sheetNo;
         $flight->save();
@@ -45,7 +45,7 @@ class FlightObserver
     {
         if ($flight->serial == "") {
             $month = Carbon::createFromFormat('Y-m-d', $flight->flightDate);
-            $count = Flight::where('flightDate', '>=', $month->startOfMonth())->where('carrier', $flight->carrier)->count();
+            $count = Flight::where('flightDate', '>=', $month->startOfMonth())->where('flightDate','<=',$month)->where('id','<',$flight->id)->where('carrier', $flight->carrier)->count();
             $sheetNo = $month->format('Ym') . str_pad($count, 4, "0", STR_PAD_LEFT);
             $flight->serial = $sheetNo;
             $flight->save();
