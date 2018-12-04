@@ -63,20 +63,21 @@
                         visible: true
                     },
                     {
+                        name: 'flightDate',
+                        title: 'Flight Date',
+                        sortField: 'flightDate',
+                        visible: true
+                    },
+                    {
                         name: 'status',
                         title: 'Status',
                         sortField: 'status',
                         visible: true
                     },
                     {
-                        name: 'arrival',
-                        title: 'ATA',
-                        sortField: 'arrival',
-                        visible: true
-                    }, {
-                        name: 'departure',
-                        title: 'ATD',
-                        sortField: 'departure',
+                        name: 'serial',
+                        title: 'Serial',
+                        sortField: 'serial',
                         visible: true
                     }, {
                         name: 'STA',
