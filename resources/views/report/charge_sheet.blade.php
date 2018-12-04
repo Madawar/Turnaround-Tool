@@ -2,7 +2,7 @@
 <head>
     <link rel="stylesheet" href="{{url('css/bundle.css')}}" type="text/css" media="all"/>
     <link rel="stylesheet" href="{{url('css/dashboard.css')}}" type="text/css" media="all"/>
-    <link href="https://fonts.googleapis.com/css?family=Orbitron" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Orbitron:400,500,700,900" rel="stylesheet">
     <style>
         body {
             background: #fff !important;
@@ -19,22 +19,36 @@
             left: 0px;
             right: 0px;
         }
+        @font-face {
+            font-family: 'Orbitron';
+            src: url('{{url('/Orbitron-Black.ttf')}}') format('truetype');
+        }
+        @font-face {
+            font-family: 'Orbitron'; /*same name, yes*/
+            font-weight: bold; /*config its weight*/
+            src: url('{{url('/Orbitron-Bold.ttf')}}') format('truetype');
+
+        }
         .sheetno {
-            font-family: 'Orbitron', sans-serif;
-            color: red;
-            font-size: 25px;
+            font-weight: bold;
             float: right;
         }
     </style>
 </head>
 <body>
-<div class="sheetno">{{$flight->serial}}</div>
-<img width="200px" src="{{url('/logo.jpg')}}">
 
 
 <h1 class="text-center">Aircraft Turnaround Charge Sheet</h1>
-<h2 class="text-center ">Date : <span class="">{!!  \Carbon\Carbon::createFromFormat('Y-m-d',$flight->flightDate)->format('j<\s\up>S<\/\s\up> F, Y')!!}</span></h2>
+<h2 class="text-center ">Date : <span
+            class="">{!!  \Carbon\Carbon::createFromFormat('Y-m-d',$flight->flightDate)->format('j<\s\up>S<\/\s\up> F, Y')!!}</span>
+</h2>
+
 <hr/>
+
+<h1 class="sheetno"><i>S/NO </i> : {{$flight->serial}}</h1>
+<br/>
+<br/>
+
 <table class="table card-table table-vcenter text-nowrap table-bordered">
 
     <tbody>
@@ -94,7 +108,7 @@
         <td style="font-weight: bold; background: #f6fbff;">Services Provided</td>
     </tr>
     <tr style="height: 300px;">
-        <td class="" style="width: 300px; height: 100px; vertical-align: top; text-align: center;font-weight: bold;">
+        <td class="" style="width: 300px; height: 80px; vertical-align: top; text-align: center;font-weight: bold;">
             1.) {{$flight->turnaroundType}}
 
         </td>
@@ -103,9 +117,9 @@
         <td style="font-weight: bold; background: #f6fbff;">Incidental Services Provided</td>
     </tr>
     <tr>
-        <td class="" style="width: 300px; height: 100px; vertical-align: top; text-align: center;font-weight: bold;">
+        <td class="" style="width: 300px; height: 80px; vertical-align: top; text-align: center;font-weight: bold;">
 
-None
+            None
         </td>
 
 
@@ -173,7 +187,7 @@ None
         <td style="font-weight: bold; background: #f6fbff;">Comments</td>
     </tr>
     <tr style="height: 300px;">
-        <td style="width: 300px; height: 100px; vertical-align: top; text-align: left;font-weight: bold;">
+        <td style="width: 300px; height: 60px; vertical-align: top; text-align: left;font-weight: bold;">
             {{$flight->remarks}}
 
         </td>

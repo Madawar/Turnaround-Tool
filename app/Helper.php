@@ -31,7 +31,7 @@ class Helper
         $name = str_slug($flight->cx->carrier . ' ' . $flight->flightNo . ' ' . $flight->flightDate);
         $exists = File::exists(storage_path("app/public/{$name}.pdf"));
         if (!$exists) {
-            $pdf = PDF::setOptions(['dpi' => 150, 'defaultPaperSize' => 'a4'])
+            $pdf = PDF::setOptions(['dpi' => 150, 'defaultPaperSize' => '8.5x11'])
                 ->loadView('report.flight_report', compact('flight'));
             $pdf->save(storage_path("app/public/{$name}.pdf"));
         }
