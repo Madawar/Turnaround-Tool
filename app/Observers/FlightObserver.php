@@ -28,7 +28,7 @@ class FlightObserver
      */
     public function created(Flight $flight)
     {
-        $month = Carbon::createFromFormat('Y-m-d', $flight->flightDate);
+        $month = Carbon::createFromFormat('Y/m/d', $flight->flightDate);
         $startOfMonth = $month->copy()->startOfMonth();
         $count = Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate','<',$month->toDateString())->where('carrier', $flight->carrier)->count();
         $sheetNo = $month->format('Ym') . str_pad($count + 1, 4, "0", STR_PAD_LEFT);
