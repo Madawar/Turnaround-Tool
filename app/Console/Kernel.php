@@ -2,7 +2,9 @@
 
 namespace App\Console;
 
+use App\Console\Commands\CreatePdf;
 use App\Console\Commands\GeneratePdfs;
+use App\Console\Commands\GenerateSchedule;
 use App\Console\Commands\PushData;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -17,7 +19,9 @@ class Kernel extends ConsoleKernel
     protected $commands = [
        Commands\BuildForm::class,
         PushData::class,
-        GeneratePdfs::class
+        GeneratePdfs::class,
+        GenerateSchedule::class,
+        CreatePdf::class
     ];
 
     /**
