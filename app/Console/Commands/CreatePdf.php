@@ -44,7 +44,7 @@ class CreatePdf extends Command
     public function handle()
     {
         $pdfmerge = new \Rainstreamweb\LaraPdfMerger\PdfManage;
-        $flights = Flight::where('flightDate', '>=', Carbon::today()->startOfMonth())->where('flightDate', '<=', Carbon::today()->endOfMonth())->orderBy('flightDate', 'asc')->limit(2)->get();
+        $flights = Flight::where('flightDate', '>=', Carbon::today()->startOfMonth())->where('flightDate', '<=', Carbon::today()->endOfMonth())->orderBy('flightDate', 'asc')->get();
         Flight::where('flightDate', '>=', Carbon::today()->startOfMonth())->where('flightDate', '<=', Carbon::today()->endOfMonth())->update(array('serial' => NULL));
         foreach ($flights as $flight) {
             $month = Carbon::createFromFormat('Y-m-d', $flight->flightDate);
