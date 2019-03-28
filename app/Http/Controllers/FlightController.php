@@ -59,18 +59,21 @@ class FlightController extends Controller
     public function store(Request $request, FlightFormRequest $form)
     {
         $flight = Flight::create($request->except('incidservices', 'incidentalservice'));
-        foreach (json_decode($request->incidservices) as $service) {
-            $service = (array)$service;
-            $service['flightId'] = $flight->id;
-            IncidentalService::firstOrCreate(array(
-                'flightId' => $service['flightId'],
-                'qty' => $service['qty'],
-                'start' => $service['start'],
-                'end' => $service['end'],
-                'INCid' => $service['INCid'],
-                'incidentalService' => $service['incidentalService'],
-                'remarks' => $service['remarks']
-            ));
+        $items = json_decode($request->incidservices);
+        if ($items != null) {
+            foreach (json_decode($request->incidservices) as $service) {
+                $service = (array)$service;
+                $service['flightId'] = $flight->id;
+                IncidentalService::firstOrCreate(array(
+                    'flightId' => $service['flightId'],
+                    'qty' => $service['qty'],
+                    'start' => $service['start'],
+                    'end' => $service['end'],
+                    'INCid' => $service['INCid'],
+                    'incidentalService' => $service['incidentalService'],
+                    'remarks' => $service['remarks']
+                ));
+            }
         }
         /** Calculate SLA Levels */
         $flight = Flight::with('services.tasks.records')->with('tasks')->find($flight->id);
@@ -106,7 +109,7 @@ class FlightController extends Controller
                 }
             });
         });
-        return redirect()->action('FlightController@index');
+        return redirect()->action('FlightController@show',$flight->id);
     }
 
     /**
