@@ -25,13 +25,13 @@ class HomeController extends Controller
     public function index(Request $request)
     {
         $request->session()->flash('message', 'You have been logged in');
-       return redirect()->action('DashboardController@index');
+       return redirect()->action('FlightController@index');
     }
 
     public function signout()
     {
         Auth::logout();
-        return redirect()->action('DashboardController@index');
+        return redirect()->action('FlightController@index');
     }
 
 
@@ -52,7 +52,7 @@ class HomeController extends Controller
         }
         $user->save();
         $request->session()->flash('message', 'Your Profile Changes have been done');
-        return redirect()->action('DashboardController@index');
+        return redirect()->action('FlightController@index');
     }
 
 }

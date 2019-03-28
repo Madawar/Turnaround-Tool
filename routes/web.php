@@ -42,6 +42,7 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 /** API */
 Route::resource('/api/user', 'Api\UserController');
+Route::resource('/api/incidentalservices', 'Api\IncidentalServiceListController');
 Route::resource('/api/flight', 'Api\FlightController');
 Route::resource('/api//carrier', 'Api\CarrierController');
 Route::get('/api/flt/report/{id}', 'Api\FlightController@report');

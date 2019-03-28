@@ -24,7 +24,7 @@ class FlightController extends Controller
      */
     public function index()
     {
-        $flights = Flight::with('services.tasks.records')->with('tasks')->get();
+        $flights = Flight::with('services.tasks.records')->with('tasks')->orderBy('flightDate','DESC')->limit(20)->get();
         $flights->map(function ($item) {
             $varDate = Carbon::createFromFormat('Y-m-d', $item->flightDate);
             $item->flightDate = $varDate->format('jS-M-y');
@@ -114,9 +114,11 @@ class FlightController extends Controller
     public function report($id)
     {
 
-        $flight = Flight::with('services.tasks.records')->with('tasks')->find($id);
+        $flight = Flight::with('services.tasks.records')->with('tasks')->with('incidentals')->find($id);
         $charge_sheet = str_slug($flight->cx->carrier . ' ' . $flight->flightNo . ' ' . $flight->flightDate) . '_chargesheet';
+        File::delete(storage_path("app/public/{$charge_sheet}.pdf"));
         $exists = File::exists(storage_path("app/public/{$charge_sheet}.pdf"));
+
         if (!$exists) {
             $pdf = PDF::setOptions(['dpi' => 150, 'defaultPaperSize' => 'a4', 'isRemoteEnabled' => true])
                 ->loadView('report.charge_sheet', compact('flight'));
@@ -187,8 +189,7 @@ class FlightController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public
-    function create()
+    public function create()
     {
         //
     }
@@ -199,8 +200,7 @@ class FlightController extends Controller
      * @param  \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public
-    function store(Request $request)
+    public function store(Request $request)
     {
         //
     }
@@ -211,8 +211,7 @@ class FlightController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function show($id)
+    public function show($id)
     {
         //
     }
@@ -223,8 +222,7 @@ class FlightController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function edit($id)
+    public function edit($id)
     {
         //
     }
@@ -236,8 +234,7 @@ class FlightController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function update(Request $request, $id)
+    public function update(Request $request, $id)
     {
         //
     }
@@ -248,8 +245,7 @@ class FlightController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public
-    function destroy($id)
+    public function destroy($id)
     {
         //
     }

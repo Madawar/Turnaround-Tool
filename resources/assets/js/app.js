@@ -13,6 +13,7 @@ import phonon from 'phonon/dist/js/phonon-core'
 import VueRouter from 'vue-router'
 import Flight from './components/Flights';
 import Service from './components/Services';
+import DatePicker from 'vue2-datepicker'
 import Task from './components/Task';
 import VTooltip from 'v-tooltip'
 import Vodal from 'vodal';
@@ -40,6 +41,7 @@ Vue.use(VTooltip)
 import { Datetime } from 'vue-datetime-2';
 
 Vue.component('datetime', Datetime);
+Vue.component('date-picker',DatePicker);
 Vue.component(Vodal.name, Vodal);
 Vue.component('date', require('./components/datepicker.vue'));
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
@@ -51,6 +53,7 @@ Vue.component('sl', require('./components/selectize/selectize'));
 Vue.component('vtable', require('./components/Table/Table'));
 Vue.component('fl', require('./components/charts/flight_details'));
 Vue.component('incid', require('./components/IncidentalService'));
+Vue.component('incidental_list', require('./components/incidentalservicelist/incidental_list'));
 
 
 window.router = new VueRouter({

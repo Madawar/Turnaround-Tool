@@ -3,14 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Flight;
+use App\Http\ExcelExports\ServiceLevelAgreementChecklist;
 use App\Http\Requests\FlightFormRequest;
 use App\IncidentalService;
+use App\IncidentalServiceList;
 use App\TaskHistory;
 use Carbon\Carbon;
 use DB;
 use Helper;
 use Illuminate\Http\Request;
 use PDF;
+use Excel;
 
 class FlightController extends Controller
 {
@@ -31,7 +34,6 @@ class FlightController extends Controller
      */
     public function index()
     {
-
         return view('flights.view_flights');
     }
 
@@ -43,7 +45,9 @@ class FlightController extends Controller
     public function create()
     {
         $incids = json_encode(array());
-        return view('flights.create_flight')->with(compact('incids'));
+        $incidentalServices = IncidentalServiceList::select(DB::raw('INCid as id'), DB::raw('description as name'))->get();
+        $incidentalServices = json_encode($incidentalServices);
+        return view('flights.create_flight')->with(compact('incids', 'incidentalServices'));
     }
 
     /**
@@ -54,17 +58,26 @@ class FlightController extends Controller
      */
     public function store(Request $request, FlightFormRequest $form)
     {
-        $flight = Flight::create($request->except('incids'));
-        foreach (json_decode($request->incids) as $service) {
+        $flight = Flight::create($request->except('incidservices', 'incidentalservice'));
+        foreach (json_decode($request->incidservices) as $service) {
             $service = (array)$service;
             $service['flightId'] = $flight->id;
-            IncidentalService::firstOrCreate($service);
+            IncidentalService::firstOrCreate(array(
+                'flightId' => $service['flightId'],
+                'qty' => $service['qty'],
+                'start' => $service['start'],
+                'end' => $service['end'],
+                'INCid' => $service['INCid'],
+                'incidentalService' => $service['incidentalService'],
+                'remarks' => $service['remarks']
+            ));
         }
         /** Calculate SLA Levels */
         $flight = Flight::with('services.tasks.records')->with('tasks')->find($flight->id);
         $flight->services->map(function ($service, $key) use ($flight) {
 
             $service->tasks->map(function ($task, $key) use ($flight, $service) {
+
                 if ($task->symbol != "") {
                     $date = Carbon::createFromFormat('Y-m-d H:i', $flight->{$task->timeFrom});
                     if ($task->symbol == "-") {
@@ -77,18 +90,20 @@ class FlightController extends Controller
                         'taskId' => $task->id,
                         'flightId' => $flight->id,
                         'cutOffTime' => $date->format('H:i'),
+                        'staffNumber' => $task->minimumStaff,
+                        'userId' => 0
+                    ));
+                } else {
+
+                    TaskHistory::create(array(
+                        'serviceId' => $service->id,
+                        'taskId' => $task->id,
+                        'flightId' => $flight->id,
+                        'cutOffTime' => null,
+                        'staffNumber' => $task->minimumStaff,
                         'userId' => 0
                     ));
                 }
-
-                TaskHistory::create(array(
-                    'serviceId' => $service->id,
-                    'taskId' => $task->id,
-                    'flightId' => $flight->id,
-                    'cutOffTime' => null,
-                    'userId' => 0
-                ));
-
             });
         });
         return redirect()->action('FlightController@index');
@@ -102,6 +117,11 @@ class FlightController extends Controller
      */
     public function show($id)
     {
+        /*
+
+               return  (new ServiceLevelAgreementChecklist($flight))->download('tac.xlsx', \Maatwebsite\Excel\Excel::XLSX);
+                dd('h');
+        */
         $flight = Flight::with('services.tasks.records')->with('tasks')->find($id);
         if ($flight->arrival) {
             $time = $flight->arrival;
@@ -118,7 +138,6 @@ class FlightController extends Controller
                 $flight->rows = 0;
 
                 $record = $flight->tasks->where('taskId', $task->id)->first();
-
                 if ($record) {
                     $task->startTime = $record->startTime;
                     $task->endTime = $record->endTime;
@@ -128,6 +147,7 @@ class FlightController extends Controller
                     if ($record->cutOffTime) {
                         $task->cutOffTime = $record->cutOffTime;
                     }
+                    $task->minimumStaff = $record->staffNumber . '/' . $task->minimumStaff;
                     if ($record->startTime != "" and $record->endTime != "") {
                         $flightDate = $flight->flightDate;
                         $startTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate . ' ' . $record->startTime);
@@ -139,24 +159,24 @@ class FlightController extends Controller
                         $hours = $endTime->diffInHours($startTime);
                         $milli = $endTime->diffInSeconds($startTime) * 1000;
 
-                        if($record->cutOffTime != ""){
+                        if ($record->cutOffTime != "") {
                             $cutOffTime = Carbon::createFromFormat('Y-m-d H:i:s', $flightDate . ' ' . $record->cutOffTime);
-                            if($startTime->greaterThan($cutOffTime)){
+                            if ($startTime->greaterThan($cutOffTime)) {
                                 $task->isMilestoneReached = "Started Off Late";
                             }
                         }
 
-                        if($task->minutesToBeDone != ""){
-                            if($flight->flightType = 'P' && $task->minutesToBeDoneAppliesTo){
-                                if($timing > $task->minutesToBeDone){
+                        if ($task->minutesToBeDone != "") {
+                            if ($flight->flightType = 'P' && $task->minutesToBeDoneAppliesTo) {
+                                if ($timing > $task->minutesToBeDone) {
                                     $task->isMilestoneReached = $task->isMilestoneReached . "/ Delayed";
-                                }else{
+                                } else {
                                     $task->isMilestoneReached = $task->isMilestoneReached . "/ On Time";
                                 }
-                            }else{
-                                if($timing > $task->minutesToBeDone){
+                            } else {
+                                if ($timing > $task->minutesToBeDone) {
                                     $task->isMilestoneReached = $task->isMilestoneReached . "/ Delayed";
-                                }else{
+                                } else {
                                     $task->isMilestoneReached = $task->isMilestoneReached . "/ On Time";
                                 }
                             }
@@ -197,7 +217,9 @@ class FlightController extends Controller
      */
     public function edit($id)
     {
-        $flight = Flight::with('cx','incidentals')->find($id);
+        $incidentalServices = IncidentalServiceList::select(DB::raw('INCid as id'), DB::raw('description as name'))->get();
+        $incidentalServices = json_encode($incidentalServices);
+        $flight = Flight::with('cx', 'incidentals')->find($id);
         $carrier = $flight->carrier;
         $flightDate = $flight->flightDate;
         $completed = $flight->completed;
@@ -209,7 +231,7 @@ class FlightController extends Controller
         $flightType = $flight->flightType;
         $turnaroundType = $flight->turnaroundType;
         $incids = json_encode($flight->incidentals);
-        return view('flights.create_flight')->with(compact('incids','flightType', 'delayCode', 'turnaroundType', 'flight', 'carrier', 'flightDate', 'arrival', 'departure', 'STA', 'STD', 'completed'));
+        return view('flights.create_flight')->with(compact('incidentalServices', 'incids', 'flightType', 'delayCode', 'turnaroundType', 'flight', 'carrier', 'flightDate', 'arrival', 'departure', 'STA', 'STD', 'completed'));
     }
 
     /**
@@ -222,15 +244,26 @@ class FlightController extends Controller
     public function update(Request $request, $id)
     {
         $flight = Flight::find($id);
-        $items = json_decode($request->incids);
-        IncidentalService::where('flightId',$id)->whereNotIn('id', array_pluck($items,'id'))->delete();
-        foreach (json_decode($request->incids) as $service) {
-            $service = (array)$service;
-            $service['flightId'] = $id;
-            IncidentalService::firstOrCreate($service);
+        $items = json_decode($request->incidservices);
+        if ($items != null) {
+            IncidentalService::where('flightId', $id)->whereNotIn('id', array_pluck($items, 'id'))->delete();
+            foreach (json_decode($request->incidservices) as $service) {
+                $service = (array)$service;
+                $service['flightId'] = $id;
+                IncidentalService::firstOrCreate(array(
+                    'flightId' => $service['flightId'],
+                    'INCid' => $service['INCid'],
+                    'qty' => $service['qty'],
+                    'start' => $service['start'],
+                    'end' => $service['end'],
+                    'remarks' => $service['remarks'],
+
+                    'incidentalService' => $service['incidentalService']
+                ));
+            }
         }
-        $flight->update($request->except('incids'));
-        return redirect()->action('FlightController@index');
+        $flight->update($request->except('incidservices', 'incidentalservice'));
+        return redirect()->action('FlightController@show', $flight->id);
     }
 
     /**
@@ -241,7 +274,8 @@ class FlightController extends Controller
      */
     public function destroy($id)
     {
-        //
+        Flight::destroy($id);
+        return array('ok' => 'destroyed');
     }
 
     public function flightDocuments($id, $type)

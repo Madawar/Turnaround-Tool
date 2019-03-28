@@ -52,6 +52,8 @@
                                             class="{{$errors->has('turnaroundType') ? 'form-control is-invalid' : ''}}"
                                             :opts="[{id:'Freighter Turnaround',name:'Freighter Turnaround'},{id:'Passenger Turnaround',name:'Passenger Turnaround'},{id:'Freight Transit',name:'Freight Transit'},{id:'Passenger Transit',name:'Passenger Transit'}]"></sl>
 
+
+
                                         {!! $errors->first('turnaroundType', '<p class="invalid-feedback">:message</p>') !!}
 
                                     </div>
@@ -94,9 +96,8 @@
 		<span class="input-group-prepend" id="flightDate">
 			<span class="input-group-text"><i class="fal fa-calendar"></i></span>
         </span>
-                                        <date name="flightDate" v-model="flightDate" autocomplete="off"
-                                              class="{{$errors->has('turnaroundType') ? 'form-control is-invalid' : 'form-control'}}"
-                                              placeholder="Flight Date"></date>
+                                        <date-picker :editable=false  format="YYYY-MM-DD" input-class="form-control" input-name="flightDate" lang="en"
+                                                     placeholder="Flight Date" type="date" v-model="flightDate"></date-picker>
                                         {!! $errors->first('flightDate', '<p class="invalid-feedback">:message</p>') !!}
                                     </div>
                                 </div>
@@ -123,16 +124,10 @@
 		<span class="input-group-prepend" id="STA">
 			<span class="input-group-text"><i class="fal fa-clock"></i></span>
         </span>
-                                        <datetime v-model="STA"
-                                                  name="STA"
-                                                  type="datetime"
-                                                  :min-date="flightDate"
-                                                  :max-date="maxDate"
-                                                  class="{{$errors->has('STA') ? 'form-control is-invalid' : ''}}"
-                                                  input-format="YYYY/MM/DD HH:mm"
-                                                  input-class="form-control"
-                                                  placeholder="Scheduled Time Of Arrival"
-                                        ></datetime>
+
+                                        <date-picker :editable=false  :not-before="flightDate"  :default-value="flightDate" format="YYYY/MM/DD HH:mm" input-class="form-control" input-name="STA" lang="en"
+                                                     placeholder="Scheduled Time Of Arrival" type="datetime" v-model="STA"></date-picker>
+
                                         {!! $errors->first('STA', '<p class="invalid-feedback">:message</p>') !!}
                                     </div>
                                 </div>
@@ -145,16 +140,9 @@
 		<span class="input-group-prepend" id="STD">
 			<span class="input-group-text"><i class="fal fa-clock"></i></span>
         </span>
-                                        <datetime v-model="STD"
-                                                  name="STD"
-                                                  type="datetime"
-                                                  :min-date="flightDate"
-                                                  :max-date="maxDate"
-                                                  input-format="YYYY/MM/DD HH:mm"
-                                                  class="{{$errors->has('STD') ? 'form-control is-invalid' : ''}}"
-                                                  input-class="form-control"
-                                                  placeholder="Scheduled Time Of Departure"
-                                        ></datetime>
+
+                                        <date-picker :editable=false  format="YYYY/MM/DD HH:mm"  :default-value="flightDate" :not-before="flightDate" input-class="form-control" input-name="STD" lang="en"
+                                                     placeholder="Scheduled Time Of Departure" type="datetime" v-model="STD"></date-picker>
                                         {!! $errors->first('STD', '<p class="invalid-feedback">:message</p>') !!}
                                     </div>
                                 </div>
@@ -222,7 +210,23 @@
 
                     <div class="p-5 mt-5 mb-5 border border-info  shadow-sm rounded">
                         <h5 class="text-center">Incidental Services</h5>
-                        <incid :serv="incids" v-model="incids"></incid>
+                        <div class="form-group">
+                            {!! Form::label('incidentalservice', 'Incidental Services') !!}
+                            <div class="input-group">
+		<span class="input-group-prepend" id="aircraftType">
+			<span class="input-group-text"><i class="fe fe-send"></i></span>
+        </span>
+                                <sl id="incidentalservice" placeholder="Incidental Service" name="incidentalservice"
+                                    v-model="incidentalservice"
+                                    class="{{$errors->has('incidentalservice') ? 'form-control is-invalid' : ''}}"
+                                    :opts="{{$incidentalServices }}"></sl>
+                                {!! $errors->first('incidentalservice', '<p class="invalid-feedback">:message</p>') !!}
+                            </div>
+                        </div>
+
+                       <incidental_list v-on:clear_incid="clearIncids" :date_limit="flightDate" :oldincids="oldincids" v-model="services" :incid="incidentalservice"></incidental_list>
+
+
                     </div>
 
                     <div class="p-5 mt-5 mb-5 border border-success  shadow-sm rounded">
@@ -236,12 +240,9 @@
 		<span class="input-group-prepend" id="arrival">
 			<span class="input-group-text"><i class="fal fa-clock"></i></span>
         </span>
-                                        <datetime name="arrival" v-model="arrival"
-                                                  type="datetime"
-                                                  input-format="YYYY/MM/DD HH:mm"
-                                                  input-class="form-control"
-                                                  placeholder="Arrival"
-                                        ></datetime>
+
+                                        <date-picker :editable=false  :not-before="flightDate"   format="YYYY/MM/DD HH:mm" input-class="form-control" input-name="arrival" lang="en"
+                                                     placeholder="Actual Time Of Arrival" type="datetime" v-model="arrival"></date-picker>
                                         {!! $errors->first('arrival', '<p class="invalid-feedback">:message</p>') !!}
                                     </div>
                                 </div>
@@ -253,13 +254,8 @@
 		<span class="input-group-prepend" id="departure">
 			<span class="input-group-text"><i class="fal fa-clock"></i></span>
         </span>
-                                        <datetime v-model="departure"
-                                                  name="departure"
-                                                  type="datetime"
-                                                  input-format="YYYY/MM/DD HH:mm"
-                                                  input-class="form-control"
-                                                  placeholder="Departure"
-                                        ></datetime>
+                                        <date-picker :editable=false :not-before="flightDate"   format="YYYY/MM/DD HH:mm" input-class="form-control" input-name="departure" lang="en"
+                                                     placeholder="Actual Time Of Departure" type="datetime" v-model="departure"></date-picker>
                                         {!! $errors->first('departure', '<p class="invalid-feedback">:message</p>') !!}
                                     </div>
                                 </div>
@@ -311,40 +307,15 @@
                         </div>
                     </div>
 
-                    <div class="p-5 mt-5 mb-5 border border-success  shadow-sm rounded">
-                        <h5 class="text-center">OSH</h5>
-                        <div class="form-group">
-                            {!! Form::label('hasOshIssue', trans('Had Incidental Issues')) !!}
-                            <div class="input-group">
-                        		<span class="input-group-prepend" id="hasOshIssue">
-                        			<span class="input-group-text"><i class="fa fa-warning"></i></span>
-                                </span>
-                                {!! Form::select('hasOshIssue',array('0'=>'No','1'=>'Yes'), null, ['class' => $errors->has('hasOshIssue') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Had OSH Issues']) !!}
 
-                                {!! $errors->first('hasOshIssue', '<p class="invalid-feedback">:message</p>') !!}
-                            </div>
-
-                            <div class="form-group">
-                                  {!! Form::label('oshDescription', trans('Incident Description')) !!}
-                            	  <div class="input-group">
-                            		<span class="input-group-prepend" id="oshDescription">
-                            			<span class="input-group-text"><i class="fa fa-comment"></i></span>
-                                    </span>
-                                   {!! Form::textarea('oshDescription', null, ['class' => $errors->has('oshDescription') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'OSH Description']) !!}
-                            	   {!! $errors->first('oshDescription', '<p class="invalid-feedback">:message</p>') !!}
-                            	</div>
-                            </div>
-
-                        </div>
-
-                    </div>
                 </div>
 
-                <input type="hidden" :value="JSON.stringify(incids)" name="incids"/>
+
                 <div class="card-footer text-right">
                     <button class="btn btn-primary btn-block">Save</button>
                 </div>
             </div>
+                <input type="hidden" name="incidservices" :value="services"/>
             {!! Form::close() !!}
         </div>
     </div>
@@ -366,7 +337,7 @@
             },
             data: {
                 task: '',
-                incids:{!!  $incids or old('incids',null)!!},
+                oldincids:{!!  $incids or old('incids',null)!!},
                 carrier: '{{$carrier or old('carrier',null)}}',
                 flightDate: '{{$flightDate or old('flightDate',null)}}',
                 arrival: '{{$arrival or old('arrival',null)}}',
@@ -378,6 +349,13 @@
                 turnaroundType: '{{$turnaroundType or old('turnaroundType',0)}}',
                 flightType: '{{$flightType or old('flightType',0)}}',
                 delayCode: '{{$delayCode or old('delayCode',0)}}',
+                incidentalservice:'',
+                services:''
+            },
+            methods:{
+                clearIncids(){
+                    this.incidentalservice = "";
+                }
             },
             computed: {
                 maxDate() {

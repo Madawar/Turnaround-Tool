@@ -30,6 +30,7 @@ class CreateFlightsTable extends Migration
             $table->dateTime('STD')->nullable();
             $table->integer('delayCode')->nullable();
             $table->string('remarks')->nullable();
+            $table->string('serial')->nullable();
             $table->boolean('loaded')->nullable();
             $table->boolean('transferred')->nullable();
             $table->text('oshDescription')->nullable();

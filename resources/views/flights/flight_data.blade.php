@@ -30,6 +30,7 @@
                         <th>Checklist</th>
                         <th>Start Time</th>
                         <th>End Time</th>
+                        <th>Man Power</th>
                         <th>Remarks</th>
                         <th>Time Taken (Mins)</th>
                         <th>Milestone Reached</th>
@@ -56,6 +57,10 @@
                                     <td>
                                         <input type="text" name="data[{{$loop->index}}][endTime]"
                                                value="{{$task->endTime}}"/>
+                                    </td>
+                                    <td>
+                                        <input type="text" name="data[{{$loop->index}}][staffNumber]"
+                                               value="{{$task->staffNumber}}"/>
                                     </td>
                                     <td>
                                         <input type="text" name="data[{{$loop->index}}][remarks]"

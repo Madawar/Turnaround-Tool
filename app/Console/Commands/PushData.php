@@ -40,10 +40,12 @@ class PushData extends Command
      */
     public function handle()
     {
-        $flights = Flight::all();
+        $flights = Flight::with('incidentals')->where('flightDate','>=',Carbon::today()->subMonth()->startOfMonth())->where('flightDate','<=',Carbon::today()->subMonth()->endOfMonth())->get();
+        DB::connection('sqlsrv')->table('RMP_FLIGHT')->where('flightDate','>=',Carbon::today()->subMonth()->startOfMonth())->where('flightDate','<=',Carbon::today()->subMonth()->endOfMonth())->delete();
+
         foreach ($flights as $flight) {
             $aircraftType = DB::connection('sqlsrv')->table('RMP_aircraftType')->where('aircraftType', $flight->aircraftType)->first();
-            if (count($aircraftType) > 0) {
+            if ($aircraftType) {
 
             } else {
                 $aircraftType = DB::connection('sqlsrv')->table('RMP_aircraftType')->insertGetId(
@@ -55,7 +57,7 @@ class PushData extends Command
 
             //Service ID
             $service = DB::connection('sqlsrv')->table('RMP_SERVICES')->where('description', $flight->turnaroundType)->first();
-            if (count($service) > 0) {
+            if ($service) {
                 $serviceId = $service->serviceId;
             } else {
                 $service = DB::connection('sqlsrv')->table('RMP_SERVICES')->insertGetId(
@@ -87,6 +89,35 @@ class PushData extends Command
                     'flightType'=>$flight->flightType
                 )
             );
+            DB::connection('sqlsrv')->table('RMP_ICIDSERVOFFERED')->where(
+                array(
+                    'flightId' => $flight->id,
+
+                )
+            )->delete();
+            foreach ($flight->incidentals as $incidental){
+                $start = $incidental->start;
+                $end= $incidental->end;
+                if($incidental->start == ""){
+                    $start = null;
+                }
+
+                if($incidental->end == ""){
+                    $end = null;
+                }
+
+                DB::connection('sqlsrv')->table('RMP_ICIDSERVOFFERED')->insert(
+                    array(
+                        'INCid' => $incidental->INCid,
+                        'flightId' => $flight->id,
+                        'qty' => $incidental->qty,
+                        'startT' => $start,
+                        'EndT' => $end,
+
+                    )
+                );
+            }
+
         }
 
 

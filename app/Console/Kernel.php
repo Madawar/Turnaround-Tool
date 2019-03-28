@@ -6,6 +6,7 @@ use App\Console\Commands\CreatePdf;
 use App\Console\Commands\GeneratePdfs;
 use App\Console\Commands\GenerateSchedule;
 use App\Console\Commands\PushData;
+use App\Console\Commands\SyncTarrif;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -21,7 +22,8 @@ class Kernel extends ConsoleKernel
         PushData::class,
         GeneratePdfs::class,
         GenerateSchedule::class,
-        CreatePdf::class
+        CreatePdf::class,
+        SyncTarrif::class
     ];
 
     /**
@@ -34,6 +36,7 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+        $schedule->command('afs:tarrif')->everyFifteenMinutes();
     }
 
     /**

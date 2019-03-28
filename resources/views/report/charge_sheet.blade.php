@@ -19,16 +19,19 @@
             left: 0px;
             right: 0px;
         }
+
         @font-face {
             font-family: 'Orbitron';
             src: url('{{url('/Orbitron-Black.ttf')}}') format('truetype');
         }
+
         @font-face {
             font-family: 'Orbitron'; /*same name, yes*/
             font-weight: bold; /*config its weight*/
             src: url('{{url('/Orbitron-Bold.ttf')}}') format('truetype');
 
         }
+
         .sheetno {
             font-weight: bold;
             float: right;
@@ -40,7 +43,7 @@
 
 <h1 class="text-center">Aircraft Turnaround Charge Sheet</h1>
 <h2 class="text-center ">Date : <span
-            class="">{!!  \Carbon\Carbon::createFromFormat('Y-m-d',$flight->flightDate)->format('j<\s\up>S<\/\s\up> F, Y')!!}</span>
+        class="">{!!  \Carbon\Carbon::createFromFormat('Y-m-d',$flight->flightDate)->format('j<\s\up>S<\/\s\up> F, Y')!!}</span>
 </h2>
 
 <hr/>
@@ -108,7 +111,7 @@
         <td style="font-weight: bold; background: #f6fbff;">Services Provided</td>
     </tr>
     <tr style="height: 300px;">
-        <td class="" style="width: 300px; height: 80px; vertical-align: top; text-align: center;font-weight: bold;">
+        <td class="" style="width: 300px; height: 80px; vertical-align: top; text-align: justify;font-weight: bold;">
             1.) {{$flight->turnaroundType}}
 
         </td>
@@ -117,9 +120,17 @@
         <td style="font-weight: bold; background: #f6fbff;">Incidental Services Provided</td>
     </tr>
     <tr>
-        <td class="" style="width: 300px; height: 80px; vertical-align: top; text-align: center;font-weight: bold;">
+        <td class="" style="width: 300px; height: 80px; vertical-align: top; text-align: justify;font-weight: bold;">
+            @foreach($flight->incidentals as $incidental)
+                <b>{{$loop->index + 1}}.)</b> {{$incidental->incidentalService}}
+                @if($incidental->start != "" || $incidental->start != null)
+                    - {{$incidental->start}} {{$incidental->end}} ,{{$incidental->remarks}}
+                    @else
+                    -  {{$incidental->qty}} ,{{$incidental->remarks}}
+                @endif
+                <br/>
+            @endforeach
 
-            None
         </td>
 
 

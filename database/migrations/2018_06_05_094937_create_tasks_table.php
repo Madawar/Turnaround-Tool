@@ -21,6 +21,7 @@ class CreateTasksTable extends Migration
             $table->string('linkedTo')->nullable();
             $table->string('timeFrom')->nullable();
             $table->double('cutOffTime', 16, 2)->nullable();
+            $table->double('minimumStaff')->nullable();
             $table->string('symbol')->nullable();
             $table->integer('order')->nullable();
             $table->string('minutesToBeDoneAppliesTo')->nullable();

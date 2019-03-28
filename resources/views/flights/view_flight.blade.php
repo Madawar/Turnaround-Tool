@@ -55,13 +55,14 @@
                     </tr>
                 </table>
                 <hr/>
-                <table class="table card-table table-vcenter text-nowrap">
+                <table class="table card-table table-vcenter text-nowrap table-responsive">
                     <tr>
                         <th>#</th>
                         <th>Checklist</th>
                         <th>Start Time</th>
                         <th>End Time</th>
                         <th>CutOff Time</th>
+                        <th>Man Power</th>
                         <th>Remarks</th>
                         <th>Time Taken (Mins)</th>
                         <th>Milestone Reached</th>
@@ -70,7 +71,7 @@
                         @if(count($service->tasks) >0)
                             <tr>
                                 <td style="font-weight: bold; background: #f6fbff;"
-                                    colspan="8">{{$service->service}}</td>
+                                    colspan="9">{{$service->service}}</td>
                             </tr>
                             <?php $count = 0 ?>
                             @foreach($service->tasks as $task)
@@ -80,6 +81,7 @@
                                     <td>{{$task->startTime}}</td>
                                     <td>{{$task->endTime}}</td>
                                     <td>{{$task->cutOffTime}}</td>
+                                    <td>{{$task->minimumStaff}}</td>
                                     <td>{{$task->remarks}}</td>
                                     <td>{{$task->minutes}} </td>
                                     <td>{{$task->isMilestoneReached}}</td>

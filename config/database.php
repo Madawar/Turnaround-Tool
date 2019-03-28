@@ -69,7 +69,7 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'host' => 'tcccspot',
+            'host' => '192.168.1.21',
             'database' => 'AFS',
             'username' => 'sa',
             'password' => '',

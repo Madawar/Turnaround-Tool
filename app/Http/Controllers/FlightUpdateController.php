@@ -63,14 +63,16 @@ class FlightUpdateController extends Controller
             $item->tasks->map(function ($item) use ($id) {
 
                 $history = TaskHistory::where('taskId', $item->id)->where('serviceId', $item->serviceId)->where('flightId', $id)->first();
-                if(count($history) > 0){
+                if(count((array)$history) > 0){
                 $item->startTime = $history->startTime;
+                $item->staffNumber = $history->staffNumber;
                 $item->endTime = $history->endTime;
                 $item->remarks = $history->remarts;
                 }else{
                     $item->startTime = '';
                     $item->endTime = '';
                     $item->remarks = '';
+                    $item->staffNumber = "";
                 }
                 return $item;
             });
@@ -100,16 +102,18 @@ class FlightUpdateController extends Controller
     public function update(Request $request, $id)
     {
         $data = $request->data;
+
         foreach ($data as $time) {
 
             $task = TaskHistory::firstOrCreate(
-                ['flightId' => $time['flightId'], 'serviceId' => $time['serviceId'], 'taskId' => $time['taskId'],'userId'=>0]
+                ['flightId' => $time['flightId'], 'serviceId' => $time['serviceId'], 'taskId' => $time['taskId']]
 
             );
             $task->update(array(
                 'startTime' => Helper::formatTime($time['startTime']),
                 'endTime' => Helper::formatTime($time['endTime']),
                 'remarks' => $time['remarks'],
+                'staffNumber'=>$time['staffNumber']
 
             ));
         }

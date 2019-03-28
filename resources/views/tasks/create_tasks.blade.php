@@ -63,6 +63,23 @@
                         </div>
 
                     </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                    <div class="form-group">
+                        {!! Form::label('minimumStaff', trans('Minimum Staff Needed For Task')) !!}
+                        <div class="input-group">
+                    		<span class="input-group-prepend" id="minimumStaff">
+                    			<span class="input-group-text"><i class="fa fa-sort-numeric-up"></i></span>
+                            </span>
+                            {!! Form::text('minimumStaff', null, ['class' => $errors->has('minimumStaff') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Minimum Staff Needed']) !!}
+                            {!! $errors->first('minimumStaff', '<p class="invalid-feedback">:message</p>') !!}
+                    	</div>
+                    </div>
+                        </div>
+                        <div class="col-md-6">
+
+                        </div>
+                    </div>
                     <div class="border p-5 mt-5 mb-5 shadow-sm rounded">
                         <h5 class="text-center">SLA Settings</h5>
                         <div class="row">

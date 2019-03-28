@@ -15,9 +15,13 @@ class CreateIncidentalServicesTable extends Migration
     {
         Schema::create('incidental_services', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('flightId');
-            $table->string('incidentalService');
-            $table->double('trips', 16, 2);
+            $table->integer('flightId')->nullable();
+            $table->string('incidentalService')->nullable();
+            $table->string('qty')->nullable();
+            $table->string('start')->nullable();
+            $table->string('end')->nullable();
+            $table->integer('INCid')->nullable();
+            $table->string('remarks')->nullable();
             $table->timestamps();
         });
     }

@@ -17,6 +17,7 @@ class Flight extends Model
     {
         return $this->hasMany('App\Service', 'carrierId', 'carrier');
     }
+
     public function incidentals()
     {
         return $this->hasMany('App\IncidentalService', 'flightId', 'id');

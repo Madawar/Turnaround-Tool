@@ -21,6 +21,7 @@ class CreateTaskHistoriesTable extends Migration
             $table->time('cutOffTime')->nullable();
             $table->boolean('completed')->nullable();
             $table->time('startTime')->nullable();
+            $table->double('staffNumber',16,2)->nullable();
             $table->time('timeOfAction')->nullable();
             $table->time('endTime')->nullable();
             $table->text('remarks')->nullable();

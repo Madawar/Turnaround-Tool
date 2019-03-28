@@ -29,6 +29,14 @@
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script src="//rubaxa.github.io/Sortable/Sortable.js"></script>
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <style>
+        .input-group >.mx-datepicker {
+            flex: 1 1 auto !important;
+        }
+        .input-group >.selectize-control{
+            flex: 1 1 auto !important;
+        }
+    </style>
 </head>
 <body class="">
 <div class="page">
