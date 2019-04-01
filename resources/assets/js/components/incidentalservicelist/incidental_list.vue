@@ -32,7 +32,7 @@
                               <i class="fe fe-clock"></i>
                             </span>
                         <date-picker ref="datepicker"  :default-value="date_limit" :not-before="date_limit" format="YYYY/MM/DD HH:mm:ss"
-                                     input-class="form-control" input-name="payment_due_date" lang="en"
+                                     input-class="form-control" input-name="start" lang="en"
                                      placeholder="Start Time" type="datetime" v-model="start"></date-picker>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                               <i class="fe fe-clock"></i>
                             </span>
                         <date-picker :not-before="start" format="YYYY/MM/DD HH:mm:ss" input-class="form-control"
-                                     input-name="payment_due_date" lang="en"
+                                     input-name="end" lang="en"
                                      placeholder="End Time" type="datetime" v-model="end"></date-picker>
 
                     </div>

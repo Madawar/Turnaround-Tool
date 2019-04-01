@@ -125,8 +125,14 @@
                 <b>{{$loop->index + 1}}.)</b> {{$incidental->incidentalService}}
                 @if($incidental->start != "" || $incidental->start != null)
                     - {{$incidental->start}} {{$incidental->end}} ,{{$incidental->remarks}}
+                @else
+                    -  {{$incidental->qty}} ,
+                    @if((int)$incidental->qty > 0)
+                        {{str_plural($incidental->remarks)}}
                     @else
-                    -  {{$incidental->qty}} ,{{$incidental->remarks}}
+                        {{$incidental->remarks}}
+                    @endif
+
                 @endif
                 <br/>
             @endforeach
