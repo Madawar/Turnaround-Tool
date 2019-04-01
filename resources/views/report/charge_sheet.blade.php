@@ -126,11 +126,11 @@
                 @if($incidental->start != "" || $incidental->start != null)
                     - {{$incidental->start}} {{$incidental->end}} ,{{$incidental->remarks}}
                 @else
-                    -  {{$incidental->qty}} ,
+                    -  {{$incidental->qty}}
                     @if((int)$incidental->qty > 0)
-                        {{str_plural($incidental->remarks)}}
+                        ,{{str_plural($incidental->remarks)}}
                     @else
-                        {{$incidental->remarks}}
+                        ,{{$incidental->remarks}}
                     @endif
 
                 @endif
