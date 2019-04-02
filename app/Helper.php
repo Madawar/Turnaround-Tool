@@ -12,6 +12,7 @@ use Carbon\Carbon;
 use PDF;
 use Route;
 use Illuminate\Support\Facades\File;
+
 class Helper
 {
     public function isCurrent($path)
@@ -70,7 +71,9 @@ class Helper
 
     public function formatDate($date)
     {
-        if ($date) {
+        if (stripos($date, '/') !== false) {
+            return Carbon::createFromFormat('Y/m/d H:i', $date)->format('Y-m-d H:i');
+        } else {
             return Carbon::createFromFormat('Y-m-d H:i:s', $date)->format('Y-m-d H:i');
         }
         return null;

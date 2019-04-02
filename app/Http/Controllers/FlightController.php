@@ -109,7 +109,32 @@ class FlightController extends Controller
                 }
             });
         });
-        return redirect()->action('FlightController@show',$flight->id);
+        $this->recreateSerials($flight->STA);
+        return redirect()->action('FlightController@show', $flight->id);
+    }
+
+    public function recreateSerials($STA)
+    {
+        $month = Carbon::createFromFormat('Y-m-d H:i', $STA);
+        $startOfMonth = $month->copy()->startOfMonth();
+        $endOfMonth = $month->copy()->endOfMonth();
+
+        $flights = Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<=', $endOfMonth)->orderBy('STA', 'asc')->get();
+        Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<=', $endOfMonth)->update(array('serial' => NULL));
+        foreach ($flights as $flight) {
+            $month = Carbon::createFromFormat('Y-m-d H:i', $flight->STA);
+            $startOfMonth = $month->copy()->startOfMonth();
+            $count = Flight::where('STA', '>=', $startOfMonth)->where('STA', '<', $month->toDateTimeString())->where('carrier', $flight->carrier)->count();
+            if ($flight->turnaroundType == 'Freighter Turnaround') {
+                $prefix = 'F';
+            } elseif ($flight->turnaroundType == 'Passenger Turnaround') {
+                $prefix = 'P';
+            }
+            $sheetNo = $month->format('Ym') . $prefix . str_pad($count + 1, 4, "0", STR_PAD_LEFT);
+            $flight->serial = $sheetNo;
+            Flight::find($flight->id)->update(array('serial' => $sheetNo));
+            $flight->save();
+        }
     }
 
     /**
@@ -248,8 +273,8 @@ class FlightController extends Controller
     {
         $flight = Flight::find($id);
         $items = json_decode($request->incidservices);
+        IncidentalService::where('flightId', $id)->delete();
         if ($items != null) {
-            IncidentalService::where('flightId', $id)->whereNotIn('id', array_pluck($items, 'id'))->delete();
             foreach (json_decode($request->incidservices) as $service) {
                 $service = (array)$service;
                 $service['flightId'] = $id;
@@ -265,7 +290,10 @@ class FlightController extends Controller
                 ));
             }
         }
+
         $flight->update($request->except('incidservices', 'incidentalservice'));
+        $flight = Flight::find($id);
+        $this->recreateSerials($flight->STA);
         return redirect()->action('FlightController@show', $flight->id);
     }
 
