@@ -109,22 +109,22 @@ class FlightController extends Controller
                 }
             });
         });
-        $this->recreateSerials($flight->STA);
+        $this->recreateSerials($flight->STA,$flight->turnaroundType,$flight->carrier);
         return redirect()->action('FlightController@show', $flight->id);
     }
 
-    public function recreateSerials($STA)
+    public function recreateSerials($STA,$turnaroundType,$carrier)
     {
         $month = Carbon::createFromFormat('Y-m-d H:i', $STA);
         $startOfMonth = $month->copy()->startOfMonth();
         $endOfMonth = $month->copy()->endOfMonth();
 
-        $flights = Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<=', $endOfMonth)->orderBy('STA', 'asc')->get();
-        Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<=', $endOfMonth)->update(array('serial' => NULL));
+        $flights = Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<=', $endOfMonth)->where('turnaroundType',$turnaroundType)->where('carrier', $carrier)->orderBy('STA', 'asc')->get();
+        Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<=', $endOfMonth)->where('turnaroundType',$turnaroundType)->update(array('serial' => NULL));
         foreach ($flights as $flight) {
             $month = Carbon::createFromFormat('Y-m-d H:i', $flight->STA);
             $startOfMonth = $month->copy()->startOfMonth();
-            $count = Flight::where('STA', '>=', $startOfMonth)->where('STA', '<', $month->toDateTimeString())->where('carrier', $flight->carrier)->count();
+            $count = Flight::withTrashed()->where('STA', '>=', $startOfMonth)->where('STA', '<', $month->toDateTimeString())->where('turnaroundType',$turnaroundType)->where('carrier', $flight->carrier)->count();
             if ($flight->turnaroundType == 'Freighter Turnaround') {
                 $prefix = 'F';
             } elseif ($flight->turnaroundType == 'Passenger Turnaround') {
@@ -293,7 +293,7 @@ class FlightController extends Controller
 
         $flight->update($request->except('incidservices', 'incidentalservice'));
         $flight = Flight::find($id);
-        $this->recreateSerials($flight->STA);
+        $this->recreateSerials($flight->STA,$flight->turnaroundType,$flight->carrier);
         return redirect()->action('FlightController@show', $flight->id);
     }
 

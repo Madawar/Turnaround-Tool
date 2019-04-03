@@ -4,10 +4,10 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Helper;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 class Flight extends Model
 {
-
+    use SoftDeletes;
     protected $guarded = [
         '_token',
 
