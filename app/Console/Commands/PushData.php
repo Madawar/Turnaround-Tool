@@ -85,6 +85,7 @@ class PushData extends Command
                     'aircraftRegistration' => $flight->aircraftRegistration,
                     'source' => 'TAC TOOL',
                     'oper' => 'DWANYOIKE',
+                    'SerialNo'=>$flight->serial,
                     'datetime' => Carbon::now(),
                     'flightType'=>$flight->flightType
                 )
