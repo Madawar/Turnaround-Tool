@@ -47,12 +47,6 @@ class CreatePdf extends Command
         $flights = Flight::where('flightDate', '>=', Carbon::today()->startOfMonth())->where('flightDate', '<=', Carbon::today()->endOfMonth())->orderBy('flightDate', 'asc')->get();
         Flight::where('flightDate', '>=', Carbon::today()->startOfMonth())->where('flightDate', '<=', Carbon::today()->endOfMonth())->update(array('serial' => NULL));
         foreach ($flights as $flight) {
-            $month = Carbon::createFromFormat('Y-m-d', $flight->flightDate);
-            $startOfMonth = $month->copy()->startOfMonth();
-            $count = Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<', $month->toDateString())->where('carrier', $flight->carrier)->count();
-            $sheetNo = $month->format('Ym') . str_pad($count + 1, 4, "0", STR_PAD_LEFT);
-            $flight->serial = $sheetNo;
-            Flight::find($flight->id)->update(array('serial' => $sheetNo));
             $flight = Flight::with('services.tasks.records')->with('tasks')->find($flight->id);
             $charge_sheet = str_slug($flight->cx->carrier . ' ' . $flight->flightNo . ' ' . $flight->flightDate) . '_chargesheet';
             //$exists = File::exists(storage_path("app/public/{$charge_sheet}.pdf"));
