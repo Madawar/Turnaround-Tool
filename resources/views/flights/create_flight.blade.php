@@ -125,7 +125,7 @@
 			<span class="input-group-text"><i class="fal fa-clock"></i></span>
         </span>
 
-                                        <date-picker :editable=false  :not-before="flightDate"  :default-value="flightDate" format="YYYY/MM/DD HH:mm" input-class="form-control" input-name="STA" lang="en"
+                                        <date-picker :editable=false minute-step="1"  :not-before="flightDate"  :default-value="flightDate" format="YYYY/MM/DD HH:mm" input-class="form-control" input-name="STA" lang="en"
                                                      placeholder="Scheduled Time Of Arrival" type="datetime" v-model="STA"></date-picker>
 
                                         {!! $errors->first('STA', '<p class="invalid-feedback">:message</p>') !!}
@@ -141,7 +141,7 @@
 			<span class="input-group-text"><i class="fal fa-clock"></i></span>
         </span>
 
-                                        <date-picker :editable=false  format="YYYY/MM/DD HH:mm"  :default-value="flightDate" :not-before="flightDate" input-class="form-control" input-name="STD" lang="en"
+                                        <date-picker :editable=false  format="YYYY/MM/DD HH:mm" minute-step="1"  :default-value="flightDate" :not-before="flightDate" input-class="form-control" input-name="STD" lang="en"
                                                      placeholder="Scheduled Time Of Departure" type="datetime" v-model="STD"></date-picker>
                                         {!! $errors->first('STD', '<p class="invalid-feedback">:message</p>') !!}
                                     </div>
@@ -193,6 +193,7 @@
 
                                 </div>
                             </div>
+
                             <div class="col-md-6">
                                 <div class="form-group">
                                     {!! Form::label('aircraftType', 'Aircraft Model') !!}
@@ -200,7 +201,7 @@
 		<span class="input-group-prepend" id="aircraftType">
 			<span class="input-group-text"><i class="fe fe-send"></i></span>
         </span>
-                                        {!! Form::text('aircraftType', null, ['class' => $errors->has('aircraftType') ? 'form-control is-invalid' : 'form-control' ,'placeholder'=>'Aircraft Type e.g 747']) !!}
+                                        {!! Form::select('aircraftType',array(''=>'','B777-300'=>'B777-300','B777-200'=>'B777-200','A380-800'=>'A380-800','B777F'=>'B777F'), null, ['class' => 'form-control']) !!}
                                         {!! $errors->first('aircraftType', '<p class="invalid-feedback">:message</p>') !!}
                                     </div>
                                 </div>
