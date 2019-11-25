@@ -2,18 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Carrier;
 use App\Flight;
-use App\Http\ExcelExports\ServiceLevelAgreementChecklist;
 use App\Http\Requests\FlightFormRequest;
 use App\IncidentalService;
 use App\IncidentalServiceList;
 use App\TaskHistory;
 use Carbon\Carbon;
 use DB;
+use Excel;
 use Helper;
 use Illuminate\Http\Request;
-use PDF;
-use Excel;
 
 class FlightController extends Controller
 {
@@ -109,28 +108,30 @@ class FlightController extends Controller
                 }
             });
         });
-        $this->recreateSerials($flight->STA,$flight->turnaroundType,$flight->carrier);
+        $this->recreateSerials($flight->STA, $flight->turnaroundType, $flight->carrier);
         return redirect()->action('FlightController@show', $flight->id);
     }
 
-    public function recreateSerials($STA,$turnaroundType,$carrier)
+    public function recreateSerials($STA, $turnaroundType, $carrier)
     {
         $month = Carbon::createFromFormat('Y-m-d H:i', $STA);
         $startOfMonth = $month->copy()->startOfMonth();
         $endOfMonth = $month->copy()->endOfMonth();
 
-        $flights = Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<=', $endOfMonth)->where('turnaroundType',$turnaroundType)->where('carrier', $carrier)->orderBy('STA', 'asc')->get();
-        Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<=', $endOfMonth)->where('turnaroundType',$turnaroundType)->update(array('serial' => NULL));
+        $flights = Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<=', $endOfMonth)->where('turnaroundType', $turnaroundType)->where('id', '>', 872)->where('carrier', $carrier)->orderBy('STA', 'asc')->get();
+        Flight::where('flightDate', '>=', $startOfMonth)->where('flightDate', '<=', $endOfMonth)->where('turnaroundType', $turnaroundType)->where('id', '>', 872)->update(array('serial' => NULL));
         foreach ($flights as $flight) {
             $month = Carbon::createFromFormat('Y-m-d H:i', $flight->STA);
             $startOfMonth = $month->copy()->startOfMonth();
-            $count = Flight::withTrashed()->where('STA', '>=', $startOfMonth)->where('STA', '<', $month->toDateTimeString())->where('turnaroundType',$turnaroundType)->where('carrier', $flight->carrier)->count();
+            $count = Flight::withTrashed()->where('STA', '>=', $startOfMonth)->where('STA', '<', $month->toDateTimeString())->where('turnaroundType', $turnaroundType)->where('carrier', $flight->carrier)->count();
+            $prefix = 'C';
             if ($flight->turnaroundType == 'Freighter Turnaround') {
                 $prefix = 'F';
             } elseif ($flight->turnaroundType == 'Passenger Turnaround') {
                 $prefix = 'P';
             }
-            $sheetNo = $month->format('Ym') . $prefix . str_pad($count + 1, 4, "0", STR_PAD_LEFT);
+            $carrier = Carrier::find($flight->carrier)->carrier;
+            $sheetNo = $month->format('Ym') . '/' . $carrier . '/' . $prefix . '/' . str_pad($count + 1, 4, "0", STR_PAD_LEFT);
             $flight->serial = $sheetNo;
             Flight::find($flight->id)->update(array('serial' => $sheetNo));
             $flight->save();
@@ -293,7 +294,7 @@ class FlightController extends Controller
 
         $flight->update($request->except('incidservices', 'incidentalservice'));
         $flight = Flight::find($id);
-        $this->recreateSerials($flight->STA,$flight->turnaroundType,$flight->carrier);
+        $this->recreateSerials($flight->STA, $flight->turnaroundType, $flight->carrier);
         return redirect()->action('FlightController@show', $flight->id);
     }
 
